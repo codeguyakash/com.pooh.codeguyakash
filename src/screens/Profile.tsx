@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react';
 import { styles } from '../globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import verifiedBadge from '../assets/icons/verified-badge.png';
+import { logout } from '../api/modules/authApi';
+import { LoginRequest, LogoutRequest } from '../types/apiTypes';
 
 const Profile = ({ navigation }: any) => {
   const [user, setUser] = useState<any>(null);
@@ -35,7 +37,12 @@ const Profile = ({ navigation }: any) => {
   }
   const handleLogout = async () => {
     setLoading(true);
+
     try {
+      await logout();
+      console.log('Logout successful');
+
+      setUser(null);
       await AsyncStorage.removeItem('accessToken');
       await AsyncStorage.removeItem('refreshToken');
       await AsyncStorage.removeItem('user');

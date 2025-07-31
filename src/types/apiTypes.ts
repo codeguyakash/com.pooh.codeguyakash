@@ -2,6 +2,7 @@ export interface LoginRequest {
   email: string;
   password: string;
 }
+
 export interface LoginResponse {
   statusCode: number;
   data: {
@@ -20,6 +21,10 @@ export interface LoginResponse {
   success: boolean;
 }
 
+export interface LogoutRequest {
+  accessToken: string;
+  refreshToken: string;
+}
 export interface RegisterRequest {
   name: string;
   email: string;

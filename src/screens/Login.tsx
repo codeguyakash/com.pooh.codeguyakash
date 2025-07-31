@@ -15,7 +15,7 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../assets/icons/logo.png';
-import { LoginRequest, LoginResponse } from '../types/apiTypes';
+import { LoginRequest } from '../types/apiTypes';
 import { login } from '../api/modules/authApi';
 
 const Login = () => {
@@ -65,8 +65,16 @@ const Login = () => {
       }
     } catch (error: any) {
       console.log('Axios error:', error);
-      console.log('Error response:', error?.response);
-      Alert.alert('⚠️ Error', error?.message || 'Unknown error');
+      console.log('Error response:');
+
+      if (isAndroid) {
+        ToastAndroid.show(
+          `${error?.response?.data.message}`,
+          ToastAndroid.SHORT
+        );
+      } else {
+        Alert.alert('Login Failed', error?.response?.data.message);
+      }
     } finally {
       setLoading(false);
     }

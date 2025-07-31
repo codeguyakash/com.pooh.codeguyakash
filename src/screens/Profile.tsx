@@ -74,12 +74,17 @@ const Profile = ({ navigation }: any) => {
                 }}>
                 {user.name}
               </Text>
-              {user.is_verified && (
-                <Image
-                  source={verifiedBadge}
-                  style={{ width: 20, height: 20 }}
-                />
-              )}
+              <View
+                style={[
+                  internalStyles.verifiedBadge,
+                  user.is_verified
+                    ? { borderColor: '#4A96FF', backgroundColor: '#CCE1FF' }
+                    : { borderColor: '#53A04A', backgroundColor: '#CEE4CC' },
+                ]}>
+                <Text style={internalStyles.verifiedText}>
+                  {user.is_verified ? 'Verified' : 'Verify'}
+                </Text>
+              </View>
             </View>
 
             <Text> {user.email}</Text>
@@ -137,6 +142,17 @@ const internalStyles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '500',
+  },
+  verifiedBadge: {
+    borderRadius: 20,
+    height: 20,
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  verifiedText: {
+    fontSize: 12,
+    marginHorizontal: 10,
   },
 });
 

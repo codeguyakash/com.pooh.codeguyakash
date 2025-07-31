@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import { styles } from '../globalStyles';
@@ -16,13 +17,6 @@ const Profile = ({ navigation }: any) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerTitle: 'Profile',
-      headerShown: true,
-      headerTitleStyle: { color: 'black' },
-      headerLeft: () => null,
-    });
-
     userData();
   }, [navigation]);
 
@@ -45,6 +39,7 @@ const Profile = ({ navigation }: any) => {
       await AsyncStorage.removeItem('accessToken');
       await AsyncStorage.removeItem('refreshToken');
       await AsyncStorage.removeItem('user');
+      ToastAndroid.show('Logout successful', ToastAndroid.SHORT);
       navigation.navigate('Login');
     } catch (error: any) {
       console.error('Logout failed:', error.message);

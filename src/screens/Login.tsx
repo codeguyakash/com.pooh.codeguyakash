@@ -44,7 +44,7 @@ const Login = () => {
         await AsyncStorage.setItem('user', JSON.stringify(data.data.user));
         if (isAndroid) {
           ToastAndroid.show(`${data.message}`, ToastAndroid.SHORT);
-          navigation.navigate('Home');
+          navigation.navigate('Profile');
           return;
         }
         Alert.alert(`${data.message}`, JSON.stringify(data));

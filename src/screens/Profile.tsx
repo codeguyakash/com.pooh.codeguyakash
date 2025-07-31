@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useEffect, useState } from 'react';
-import Menu from '../components/Menu';
 import { styles } from '../globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import verifiedBadge from '../assets/icons/verified-badge.png';
@@ -110,7 +109,6 @@ const Profile = ({ navigation }: any) => {
           )}
         </TouchableOpacity>
       </View>
-      <Menu navigation={navigation} />
     </View>
   );
 };

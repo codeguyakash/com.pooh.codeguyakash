@@ -9,19 +9,16 @@ import {
   ToastAndroid,
   Platform,
   Image,
-  Button,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../assets/icons/logo.png';
-import { LoginRequest, LoginResponse } from '../types/apiTypes';
-import { login } from '../api/modules/authApi';
-import { postMethod } from '../api/httpMethods';
 
-const Login = () => {
+const Signup = () => {
   const [email, setEmail] = useState('codeguyakash.dev@gmail.com');
   const [password, setPassword] = useState('Hello@#123');
+  const [name, setName] = useState('Akash');
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
 
@@ -29,45 +26,42 @@ const Login = () => {
 
   const navigation: any = useNavigation();
 
-  const handleLogin = async (
-    email: string,
-    password: string,
-    setLoading: (v: boolean) => void
-  ) => {
+  const handleLogin = async () => {
     setLoading(true);
-    const payload: LoginRequest = { email, password };
-
     try {
-      const response = await login(payload);
-
-      if (response.success && response.data) {
-        const { accessToken, refreshToken, user } = response.data;
-
-        await AsyncStorage.setItem('accessToken', accessToken);
-        await AsyncStorage.setItem('refreshToken', refreshToken);
-        await AsyncStorage.setItem('user', JSON.stringify(user));
-
-        const message = response.message || 'Login successful';
-
-        if (isAndroid) {
-          ToastAndroid.show(message, ToastAndroid.SHORT);
-        } else {
-          Alert.alert('✅ Login Success', message);
+      const response = await fetch(
+        'https://node-login-auth.vercel.app/api/v1/auth/login',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
         }
+      );
+      const data = await response.json();
 
-        navigation.navigate('Profile' as never);
+      console.log(data);
+      if (data.success && data.data) {
+        await AsyncStorage.setItem('accessToken', data.data.accessToken);
+        await AsyncStorage.setItem('refreshToken', data.data.refreshToken);
+        await AsyncStorage.setItem('user', JSON.stringify(data.data.user));
+        if (isAndroid) {
+          ToastAndroid.show(`${data.message}`, ToastAndroid.SHORT);
+          navigation.navigate('Profile');
+          return;
+        }
+        Alert.alert(`${data.message}`, JSON.stringify(data));
       } else {
-        const errorMsg = response.message || 'Login failed';
         if (isAndroid) {
-          ToastAndroid.show(`❌ ${errorMsg}`, ToastAndroid.SHORT);
-        } else {
-          Alert.alert('❌ Login Failed', errorMsg);
+          ToastAndroid.show(
+            `❌ ${data.message || 'Unknown error'}`,
+            ToastAndroid.SHORT
+          );
+          return;
         }
+        Alert.alert(`❌ ${data.message}`, data.message || 'Unknown error');
       }
     } catch (error: any) {
-      console.log('Axios error:', error);
-      console.log('Error response:', error?.response);
-      Alert.alert('⚠️ Error', error?.message || 'Unknown error');
+      Alert.alert('⚠️ Error', error.message);
     } finally {
       setLoading(false);
     }
@@ -76,7 +70,15 @@ const Login = () => {
   return (
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} />
-      <Text style={styles.subtitle}>Login to your account</Text>
+      <Text style={styles.subtitle}>Create your account</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+        value={name}
+        autoCapitalize="none"
+        onChangeText={setName}
+        placeholderTextColor="#999"
+      />
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -104,33 +106,29 @@ const Login = () => {
       </View>
 
       <TouchableOpacity
-        style={[
-          styles.loginButton,
-          loading ? { backgroundColor: '#999' } : null,
-        ]}
-        onPress={() => handleLogin(email, password, setLoading)}
-        disabled={loading}
-        activeOpacity={0.8}>
+        style={[styles.loginButton, loading && { backgroundColor: '#999' }]}
+        onPress={handleLogin}
+        disabled={loading}>
         {loading ? (
           <ActivityIndicator color="#fff" />
         ) : (
-          <Text style={styles.loginText}>Login</Text>
+          <Text style={styles.loginText}>Signup</Text>
         )}
       </TouchableOpacity>
 
       <Text style={{ textAlign: 'center', marginTop: 20 }}>
-        Don't have an account?{' '}
+        Already Have an account?{' '}
         <Text
           style={{ color: '#ff9100ff', fontWeight: 'bold' }}
-          onPress={() => navigation.navigate('Signup')}>
-          Sign Up
+          onPress={() => navigation.navigate('Login')}>
+          Login
         </Text>
       </Text>
     </View>
   );
 };
 
-export default Login;
+export default Signup;
 
 const styles = StyleSheet.create({
   container: {

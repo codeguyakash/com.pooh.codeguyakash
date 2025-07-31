@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Profile from './src/screens/Profile';
 import Login from './src/screens/Login';
 import Auth from './src/context/Auth';
+import Signup from './src/screens/Signup';
 
 const Stack = createStackNavigator();
 
@@ -15,6 +16,7 @@ function App(): React.JSX.Element {
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator>
     </NavigationContainer>

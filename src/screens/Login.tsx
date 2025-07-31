@@ -17,7 +17,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../assets/icons/logo.png';
 import { LoginRequest, LoginResponse } from '../types/apiTypes';
 import { login } from '../api/modules/authApi';
-import { postMethod } from '../api/httpMethods';
 
 const Login = () => {
   const [email, setEmail] = useState('codeguyakash.dev@gmail.com');

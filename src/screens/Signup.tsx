@@ -14,6 +14,8 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../assets/icons/logo.png';
+import { RegisterRequest } from '../types/apiTypes';
+import { register } from '../api/modules/authApi';
 
 const Signup = () => {
   const [email, setEmail] = useState('codeguyakash.dev@gmail.com');
@@ -26,42 +28,54 @@ const Signup = () => {
 
   const navigation: any = useNavigation();
 
-  const handleLogin = async () => {
+  const handleSignup = async (
+    email: string,
+    password: string,
+    name: string,
+    setLoading: (v: boolean) => void
+  ) => {
     setLoading(true);
-    try {
-      const response = await fetch(
-        'https://node-login-auth.vercel.app/api/v1/auth/login',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        }
-      );
-      const data = await response.json();
+    const payload: RegisterRequest = { name, email, password };
 
-      console.log(data);
-      if (data.success && data.data) {
-        await AsyncStorage.setItem('accessToken', data.data.accessToken);
-        await AsyncStorage.setItem('refreshToken', data.data.refreshToken);
-        await AsyncStorage.setItem('user', JSON.stringify(data.data.user));
+    try {
+      const response = await register(payload);
+
+      console.log('Signup Response:', response);
+
+      if (response.success && response.data) {
+        const { accessToken, refreshToken, user } = response.data;
+
+        await AsyncStorage.setItem('accessToken', accessToken);
+        await AsyncStorage.setItem('refreshToken', refreshToken);
+        await AsyncStorage.setItem('user', JSON.stringify(user));
+
+        const message = response.message || 'Registration successful';
         if (isAndroid) {
-          ToastAndroid.show(`${data.message}`, ToastAndroid.SHORT);
-          navigation.navigate('Profile');
-          return;
+          ToastAndroid.show(message, ToastAndroid.SHORT);
+        } else {
+          Alert.alert('✅ Registration Success', message);
         }
-        Alert.alert(`${data.message}`, JSON.stringify(data));
+        navigation.navigate('Profile' as never);
       } else {
+        const errorMsg = response.message || 'Registration failed';
         if (isAndroid) {
-          ToastAndroid.show(
-            `❌ ${data.message || 'Unknown error'}`,
-            ToastAndroid.SHORT
-          );
-          return;
+          ToastAndroid.show(`${errorMsg}`, ToastAndroid.SHORT);
+        } else {
+          Alert.alert('Registration Failed', errorMsg);
         }
-        Alert.alert(`❌ ${data.message}`, data.message || 'Unknown error');
       }
     } catch (error: any) {
-      Alert.alert('⚠️ Error', error.message);
+      console.log('Axios error:', error);
+      console.log('Error response:');
+
+      if (isAndroid) {
+        ToastAndroid.show(
+          `${error?.response?.data.message}`,
+          ToastAndroid.SHORT
+        );
+      } else {
+        Alert.alert('Registration Failed', error?.response?.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -107,7 +121,7 @@ const Signup = () => {
 
       <TouchableOpacity
         style={[styles.loginButton, loading && { backgroundColor: '#999' }]}
-        onPress={handleLogin}
+        onPress={() => handleSignup(email, password, name, setLoading)}
         disabled={loading}>
         {loading ? (
           <ActivityIndicator color="#fff" />

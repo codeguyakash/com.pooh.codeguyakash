@@ -16,15 +16,21 @@ import Splash from './src/screens/Splash';
 const Stack = createStackNavigator();
 
 function AppNavigation(): React.JSX.Element {
-  const { loading } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
 
   if (loading) return <Splash />;
+  console.log(isAuthenticated);
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen name="Profile" component={Profile} />
+      {isAuthenticated ? (
+        <Stack.Screen name="Profile" component={Profile} />
+      ) : (
+        <>
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
+        </>
+      )}
     </Stack.Navigator>
   );
 }

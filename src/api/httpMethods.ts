@@ -5,6 +5,7 @@ export const getMethod = async <T>(
   endpoint: string,
   config: AxiosRequestConfig = {}
 ): Promise<T> => {
+  console.log('Endpoint:', endpoint);
   const response: AxiosResponse<T> = await axiosInstance.get(endpoint, config);
   return response.data;
 };
@@ -14,6 +15,7 @@ export const postMethod = async <T>(
   data: any,
   config: AxiosRequestConfig = {}
 ): Promise<T> => {
+  console.log('Endpoint:', endpoint, 'Data:', data);
   const response: AxiosResponse<T> = await axiosInstance.post(
     endpoint,
     data,
@@ -27,6 +29,7 @@ export const putMethod = async <T>(
   data: any,
   config: AxiosRequestConfig = {}
 ): Promise<T> => {
+  console.log('Endpoint:', endpoint, 'Data:', data);
   const response: AxiosResponse<T> = await axiosInstance.put(
     endpoint,
     data,
@@ -39,6 +42,7 @@ export const deleteMethod = async <T>(
   endpoint: string,
   config: AxiosRequestConfig = {}
 ): Promise<T> => {
+  console.log('Endpoint:', endpoint);
   const response: AxiosResponse<T> = await axiosInstance.delete(
     endpoint,
     config

@@ -12,6 +12,7 @@ export const login = (payload: LoginRequest): Promise<LoginResponse> =>
 
 export const logout = async (): Promise<void> => {
   const refreshToken = await AsyncStorage.getItem('refreshToken');
+  console.log('Logging out with refresh token:', refreshToken);
   return getMethod<void>('/auth/logout', {
     headers: {
       'x-refresh-token': refreshToken || '',
@@ -31,16 +32,18 @@ export const tokenRefresh = (payload: any): Promise<any> =>
 export const verifyAccessToken = async (
   accessToken: string
 ): Promise<boolean> => {
+  console.log('Verifying access token:', accessToken);
   try {
     const response = await postMethod<LoginResponse>(
       '/auth/verify',
-      {}, // empty body
+      {},
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       }
     );
+    console.log('Access token verification response:', response);
     return response.success;
   } catch (error) {
     console.error('Access token verification failed:', error);

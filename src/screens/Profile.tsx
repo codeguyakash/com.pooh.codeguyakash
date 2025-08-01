@@ -14,7 +14,7 @@ const Profile = ({ navigation }: any) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const { showToast } = useToast();
-
+  //  const ws = new WebSocket(`wss://${SOCKET_BASE_URL}`);
   useEffect(() => {
     userData();
   }, [navigation]);
@@ -52,12 +52,6 @@ const Profile = ({ navigation }: any) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const showHandler = () => {
-    showToast(
-      'Toast trigger ho raha hai, lekin screen pe dikh nahi raha ya late dikh raha hai,'
-    );
   };
 
   return (
@@ -116,11 +110,6 @@ const Profile = ({ navigation }: any) => {
           ) : (
             <Text style={styles.loginText}>Logout</Text>
           )}
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.loginButton, { marginTop: 20 }]}
-          onPress={showHandler}>
-          <Text style={styles.loginText}>Show Toast</Text>
         </TouchableOpacity>
       </View>
     </View>

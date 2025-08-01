@@ -17,8 +17,8 @@ import { register } from '../api/modules/authApi';
 import { useAppTheme } from '../context/ThemeContext';
 import { useToast } from '../context/ToastContext';
 
-const Signup = () => {
-  const [email, setEmail] = useState('pooh@codeguyakash.in');
+const Register = () => {
+  const [email, setEmail] = useState('pooh@codeguyakashs.in');
   const [password, setPassword] = useState('Password@#123');
   const [name, setName] = useState('Akash');
   const [loading, setLoading] = useState(false);
@@ -39,7 +39,7 @@ const Signup = () => {
 
     try {
       const response = await register(payload);
-
+      console.log('Response from register:', response);
       if (response.success && response.data) {
         const { accessToken, refreshToken, user } = response.data;
 
@@ -51,12 +51,27 @@ const Signup = () => {
         showToast(message);
         navigation.navigate('Profile' as never);
       } else {
+        console.error('Registration failed:', response);
         const errorMsg = response.message || 'Registration failed';
         showToast(errorMsg);
       }
     } catch (error: any) {
-      console.error('Signup error:', error);
-      showToast(error.message || 'An error occurred during registration');
+      console.log('Signup error:', error);
+
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        const errorMsg = error.response.data.message;
+        console.log('Error message from server:', errorMsg);
+        showToast(errorMsg, 3000);
+      } else if (error instanceof Error) {
+        console.log('Generic error message:', error.message);
+        showToast(error.message || 'An error occurred during registration');
+      } else {
+        showToast('An unknown error occurred during registration');
+      }
     } finally {
       setLoading(false);
     }
@@ -140,7 +155,7 @@ const Signup = () => {
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.loginText}>Signup</Text>
+            <Text style={styles.loginText}>Register</Text>
           )}
         </TouchableOpacity>
 
@@ -157,7 +172,7 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Register;
 
 const styles = StyleSheet.create({
   safe: {

@@ -10,24 +10,52 @@ const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   const [toast, setToast] = useState({ message: '', visible: false });
-  const [position] = useState(new Animated.Value(-100));
+  const fadeAnim = useState(new Animated.Value(0))[0];
+  const translateY = useState(new Animated.Value(0))[0];
+  const scale = useState(new Animated.Value(1))[0];
   const theme = useAppTheme();
 
-  const showToast = (message: string, duration: number = 1500) => {
+  const showToast = (message: string, duration = 1500) => {
     setToast({ message, visible: true });
 
-    Animated.timing(position, {
-      toValue: 50,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+    // Reset values
+    fadeAnim.setValue(0);
+    translateY.setValue(10);
+    scale.setValue(1);
 
-    setTimeout(() => {
-      Animated.timing(position, {
-        toValue: -100,
+    // Fade in and rise slightly
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
         duration: 300,
         useNativeDriver: true,
-      }).start(() => {
+      }),
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    // Vanish effect after duration
+    setTimeout(() => {
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+        Animated.timing(translateY, {
+          toValue: -20,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scale, {
+          toValue: 0.95,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+      ]).start(() => {
         setToast({ message: '', visible: false });
       });
     }, duration);
@@ -43,7 +71,8 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
           style={[
             dynamicStyles.toastContainer,
             {
-              transform: [{ translateY: position }],
+              opacity: fadeAnim,
+              transform: [{ translateY: translateY }, { scale: scale }],
             },
           ]}>
           <Text style={dynamicStyles.toastText}>{toast.message}</Text>
@@ -61,7 +90,6 @@ export const useToast = () => {
   return context;
 };
 
-// Dynamic styles based on theme
 const createDynamicStyles = (
   theme: any
 ): {
@@ -70,17 +98,16 @@ const createDynamicStyles = (
 } =>
   StyleSheet.create({
     toastContainer: {
-      minWidth: 200,
+      minWidth: 120,
       maxWidth: '80%',
       position: 'absolute',
       top: 40,
       alignSelf: 'center',
       backgroundColor: theme.inputBg,
-      paddingVertical: 10,
-      paddingHorizontal: 20,
+      paddingVertical: 5,
+      paddingHorizontal: 10,
       borderRadius: 8,
       zIndex: 9999,
-
       borderColor: theme.inputBorder,
       borderWidth: 1,
     },
@@ -88,6 +115,5 @@ const createDynamicStyles = (
       color: theme.text,
       fontSize: 14,
       textAlign: 'center',
-      paddingHorizontal: 5,
     },
   });

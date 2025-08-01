@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Profile from './src/screens/Profile';
 import Login from './src/screens/Login';
-import Signup from './src/screens/Signup';
+import Register from './src/screens/Register';
 
 import Auth from './src/context/Auth';
 import { ThemeProvider } from './src/context/ThemeContext';
@@ -21,7 +21,7 @@ function App(): React.JSX.Element {
             screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Auth" component={Auth} />
             <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Signup" component={Signup} />
+            <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="Profile" component={Profile} />
           </Stack.Navigator>
         </NavigationContainer>

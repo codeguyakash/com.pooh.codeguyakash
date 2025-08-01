@@ -19,7 +19,7 @@ import { useToast } from '../context/ToastContext';
 
 const Login = () => {
   const [email, setEmail] = useState('pooh@codeguyakash.in');
-  const [password, setPassword] = useState('Password@#123');
+  const [password, setPassword] = useState('Password@#1230');
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
 
@@ -53,8 +53,20 @@ const Login = () => {
         showToast(errorMsg);
       }
     } catch (error: any) {
-      console.error('Login error:', error);
-      showToast(error.message || 'An error occurred during login');
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        const errorMsg = error.response.data.message;
+        console.log('Error message from server:', errorMsg);
+        showToast(errorMsg, 3000);
+      } else if (error instanceof Error) {
+        console.log('Generic error message:', error.message);
+        showToast(error.message || 'An error occurred during registration');
+      } else {
+        showToast('An unknown error occurred during registration');
+      }
     } finally {
       setLoading(false);
     }
@@ -130,8 +142,8 @@ const Login = () => {
           Don't have an account?{' '}
           <Text
             style={{ color: theme.button, fontWeight: 'bold' }}
-            onPress={() => navigation.navigate('Signup')}>
-            Sign Up
+            onPress={() => navigation.navigate('Register')}>
+            Register
           </Text>
         </Text>
       </View>

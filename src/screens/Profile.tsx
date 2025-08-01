@@ -17,7 +17,6 @@ const Profile = ({ navigation }: any) => {
 
   useEffect(() => {
     userData();
-    showToast('Welcome to your profile!');
   }, [navigation]);
 
   async function userData() {
@@ -29,7 +28,6 @@ const Profile = ({ navigation }: any) => {
       const { user } = response.data;
       if (response.success && response.data) {
         setUser(user);
-        console.log('User data fetched successfully:', user);
       }
       setLoading(false);
     } catch (error: any) {

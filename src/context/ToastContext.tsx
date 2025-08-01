@@ -132,5 +132,6 @@ const createStyles = (
       color: theme.text || '#fff',
       fontSize: 14,
       textAlign: 'center',
+      paddingHorizontal: 1,
     },
   });

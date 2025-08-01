@@ -18,9 +18,9 @@ import { useAppTheme } from '../context/ThemeContext';
 import { useToast } from '../context/ToastContext';
 
 const Register = () => {
-  const [email, setEmail] = useState('pooh@codeguyakashs.in');
+  const [email, setEmail] = useState('suraj@codeguyakash.in');
   const [password, setPassword] = useState('Password@#123');
-  const [name, setName] = useState('Akash');
+  const [name, setName] = useState('Suraj');
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
 

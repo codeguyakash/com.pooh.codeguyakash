@@ -54,6 +54,12 @@ const Profile = ({ navigation }: any) => {
     }
   };
 
+  const showHandler = () => {
+    showToast(
+      'Toast trigger ho raha hai, lekin screen pe dikh nahi raha ya late dikh raha hai,'
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -110,6 +116,11 @@ const Profile = ({ navigation }: any) => {
           ) : (
             <Text style={styles.loginText}>Logout</Text>
           )}
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.loginButton, { marginTop: 20 }]}
+          onPress={showHandler}>
+          <Text style={styles.loginText}>Show Toast</Text>
         </TouchableOpacity>
       </View>
     </View>

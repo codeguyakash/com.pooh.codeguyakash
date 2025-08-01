@@ -19,8 +19,8 @@ import { LoginRequest } from '../types/apiTypes';
 import { login } from '../api/modules/authApi';
 
 const Login = () => {
-  const [email, setEmail] = useState('codeguyakash.dev@gmail.com');
-  const [password, setPassword] = useState('Hello@#123');
+  const [email, setEmail] = useState('pooh@codeguyakash.in');
+  const [password, setPassword] = useState('Password@#123');
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
 
@@ -44,7 +44,7 @@ const Login = () => {
 
         await AsyncStorage.setItem('accessToken', accessToken);
         await AsyncStorage.setItem('refreshToken', refreshToken);
-        await AsyncStorage.setItem('user', JSON.stringify(user));
+        await AsyncStorage.setItem('userId', Number(user.id).toString());
 
         const message = response.message || 'Login successful';
 

@@ -21,3 +21,6 @@ export const logout = async (): Promise<void> => {
 
 export const register = (payload: RegisterRequest): Promise<RegisterResponse> =>
   postMethod<RegisterResponse>('/auth/register', payload);
+
+export const getUserData = (userId: string): Promise<LoginResponse> =>
+  getMethod<LoginResponse>(`/auth/user/${userId}`);

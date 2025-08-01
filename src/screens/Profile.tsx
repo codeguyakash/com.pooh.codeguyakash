@@ -1,18 +1,14 @@
 import {
   Text,
   View,
-  Image,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
   ToastAndroid,
 } from 'react-native';
 import { useEffect, useState } from 'react';
-import { styles } from '../globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import verifiedBadge from '../assets/icons/verified-badge.png';
-import { logout } from '../api/modules/authApi';
-import { LoginRequest, LogoutRequest } from '../types/apiTypes';
+import { logout, getUserData } from '../api/modules/authApi';
 
 const Profile = ({ navigation }: any) => {
   const [user, setUser] = useState<any>(null);
@@ -23,16 +19,22 @@ const Profile = ({ navigation }: any) => {
   }, [navigation]);
 
   async function userData() {
+    setLoading(true);
+    let userId = String(await AsyncStorage.getItem('userId'));
     try {
-      let data = await AsyncStorage.getItem('user');
-      if (data) {
-        data = JSON.parse(data);
-        setUser(data);
-      } else {
-        console.log('No user data found');
+      console.log(userId);
+      let response = await getUserData(userId);
+      console.log(response);
+      console.log(response.success);
+      const { user } = response.data;
+      if (response.success && response.data) {
+        setUser(user);
+        console.log(user);
       }
+      setLoading(false);
     } catch (error: any) {
       console.log('Data not found');
+      setLoading(false);
     }
   }
   const handleLogout = async () => {
@@ -43,9 +45,7 @@ const Profile = ({ navigation }: any) => {
       console.log('Logout successful');
 
       setUser(null);
-      await AsyncStorage.removeItem('accessToken');
-      await AsyncStorage.removeItem('refreshToken');
-      await AsyncStorage.removeItem('user');
+      await AsyncStorage.clear();
       ToastAndroid.show('Logout successful', ToastAndroid.SHORT);
       navigation.navigate('Login');
     } catch (error: any) {
@@ -61,8 +61,8 @@ const Profile = ({ navigation }: any) => {
         {user ? (
           <View style={{ alignItems: 'center', marginTop: 20 }}>
             {/* Avatar */}
-            <View style={internalStyles.Avatar}>
-              <Text style={internalStyles.AvatarText}>
+            <View style={styles.Avatar}>
+              <Text style={styles.AvatarText}>
                 {user?.name?.charAt(0).toUpperCase()}
               </Text>
             </View>
@@ -83,12 +83,12 @@ const Profile = ({ navigation }: any) => {
               </Text>
               <View
                 style={[
-                  internalStyles.verifiedBadge,
+                  styles.verifiedBadge,
                   user.is_verified
                     ? { borderColor: '#4A96FF', backgroundColor: '#CCE1FF' }
                     : { borderColor: '#53A04A', backgroundColor: '#CEE4CC' },
                 ]}>
-                <Text style={internalStyles.verifiedText}>
+                <Text style={styles.verifiedText}>
                   {user.is_verified ? 'Verified' : 'Verify'}
                 </Text>
               </View>
@@ -103,16 +103,13 @@ const Profile = ({ navigation }: any) => {
         )}
 
         <TouchableOpacity
-          style={[
-            internalStyles.loginButton,
-            loading && { backgroundColor: '#999' },
-          ]}
+          style={[styles.loginButton, loading && { backgroundColor: '#999' }]}
           onPress={handleLogout}
           disabled={loading}>
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={internalStyles.loginText}>Logout</Text>
+            <Text style={styles.loginText}>Logout</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -120,7 +117,13 @@ const Profile = ({ navigation }: any) => {
   );
 };
 
-const internalStyles = StyleSheet.create({
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 25,
+    backgroundColor: '#f8f9fa',
+  },
   Avatar: {
     width: 100,
     height: 100,

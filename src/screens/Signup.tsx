@@ -18,8 +18,8 @@ import { RegisterRequest } from '../types/apiTypes';
 import { register } from '../api/modules/authApi';
 
 const Signup = () => {
-  const [email, setEmail] = useState('codeguyakash.dev@gmail.com');
-  const [password, setPassword] = useState('Hello@#123');
+  const [email, setEmail] = useState('pooh@codeguyakash.in');
+  const [password, setPassword] = useState('Password@#123');
   const [name, setName] = useState('Akash');
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);

@@ -5,11 +5,8 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
-  Alert,
-  ToastAndroid,
-  Platform,
   Image,
-  Button,
+  SafeAreaView,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -17,6 +14,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../assets/icons/logo.png';
 import { LoginRequest } from '../types/apiTypes';
 import { login } from '../api/modules/authApi';
+import { useAppTheme } from '../context/ThemeContext';
+import { useToast } from '../context/ToastContext';
 
 const Login = () => {
   const [email, setEmail] = useState('pooh@codeguyakash.in');
@@ -24,9 +23,9 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
 
-  const [isAndroid, setIsAndroid] = useState(Platform.OS === 'android');
-
   const navigation: any = useNavigation();
+  const theme = useAppTheme();
+  const { showToast } = useToast();
 
   const handleLogin = async (
     email: string,
@@ -47,120 +46,117 @@ const Login = () => {
         await AsyncStorage.setItem('userId', Number(user.id).toString());
 
         const message = response.message || 'Login successful';
-
-        if (isAndroid) {
-          ToastAndroid.show(message, ToastAndroid.SHORT);
-        } else {
-          Alert.alert('✅ Login Success', message);
-        }
-
+        showToast(message);
         navigation.navigate('Profile' as never);
       } else {
         const errorMsg = response.message || 'Login failed';
-        if (isAndroid) {
-          ToastAndroid.show(`❌ ${errorMsg}`, ToastAndroid.SHORT);
-        } else {
-          Alert.alert('❌ Login Failed', errorMsg);
-        }
+        showToast(errorMsg);
       }
     } catch (error: any) {
-      console.log('Axios error:', error);
-      console.log('Error response:');
-
-      if (isAndroid) {
-        ToastAndroid.show(
-          `${error?.response?.data.message}`,
-          ToastAndroid.SHORT
-        );
-      } else {
-        Alert.alert('Login Failed', error?.response?.data.message);
-      }
+      console.error('Login error:', error);
+      showToast(error.message || 'An error occurred during login');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Image source={logo} style={styles.logo} />
-      <Text style={styles.subtitle}>Login to your account</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        autoCapitalize="none"
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        placeholderTextColor="#999"
-      />
-
-      <View style={styles.passwordWrapper}>
-        <TextInput
-          style={[styles.input, { flex: 1, marginBottom: 0 }]}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={!isShowPassword}
-          placeholderTextColor="#999"
-        />
-        <TouchableOpacity
-          onPress={() => setIsShowPassword(!isShowPassword)}
-          style={styles.toggleBtn}>
-          <Text style={styles.toggleText}>{isShowPassword ? '🙈' : '👁️'}</Text>
-        </TouchableOpacity>
-      </View>
-
-      <TouchableOpacity
-        style={[
-          styles.loginButton,
-          loading ? { backgroundColor: '#999' } : null,
-        ]}
-        onPress={() => handleLogin(email, password, setLoading)}
-        disabled={loading}
-        activeOpacity={0.8}>
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.loginText}>Login</Text>
-        )}
-      </TouchableOpacity>
-
-      <Text style={{ textAlign: 'center', marginTop: 20 }}>
-        Don't have an account?{' '}
-        <Text
-          style={{ color: '#ff9100ff', fontWeight: 'bold' }}
-          onPress={() => navigation.navigate('Signup')}>
-          Sign Up
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
+        <Image source={logo} style={styles.logo} />
+        <Text style={[styles.subtitle, { color: theme.subtitle }]}>
+          Login to your account
         </Text>
-      </Text>
-    </View>
+        <TextInput
+          style={[
+            styles.input,
+            {
+              backgroundColor: theme.inputBg,
+              borderColor: theme.inputBorder,
+              color: theme.text,
+            },
+          ]}
+          placeholder="Email"
+          value={email}
+          autoCapitalize="none"
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          placeholderTextColor={theme.placeholder}
+        />
+
+        <View style={styles.passwordWrapper}>
+          <TextInput
+            style={[
+              styles.input,
+              {
+                flex: 1,
+                marginBottom: 0,
+                backgroundColor: theme.inputBg,
+                borderColor: theme.inputBorder,
+                color: theme.text,
+              },
+            ]}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!isShowPassword}
+            placeholderTextColor={theme.placeholder}
+          />
+          <TouchableOpacity
+            onPress={() => setIsShowPassword(!isShowPassword)}
+            style={styles.toggleBtn}>
+            <Text style={[styles.toggleText, { color: theme.text }]}>
+              {isShowPassword ? '🙈' : '👁️'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          style={[
+            styles.loginButton,
+            { backgroundColor: loading ? theme.buttonDisabled : theme.button },
+          ]}
+          onPress={() => handleLogin(email, password, setLoading)}
+          disabled={loading}
+          activeOpacity={0.8}>
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.loginText}>Login</Text>
+          )}
+        </TouchableOpacity>
+
+        <Text style={{ textAlign: 'center', marginTop: 20, color: theme.text }}>
+          Don't have an account?{' '}
+          <Text
+            style={{ color: theme.button, fontWeight: 'bold' }}
+            onPress={() => navigation.navigate('Signup')}>
+            Sign Up
+          </Text>
+        </Text>
+      </View>
+    </SafeAreaView>
   );
 };
 
 export default Login;
 
 const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 25,
-    backgroundColor: '#f8f9fa',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: 8,
+    paddingHorizontal: 20,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
     textAlign: 'center',
     marginBottom: 30,
   },
   input: {
-    height: 50,
-    borderColor: '#ddd',
+    height: 48,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 15,
@@ -182,7 +178,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   loginButton: {
-    backgroundColor: '#ff9100ff',
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
@@ -193,10 +188,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 90,
+    height: 90,
     alignSelf: 'center',
     marginBottom: 20,
-    borderRadius: 50,
+    borderRadius: 45,
   },
 });

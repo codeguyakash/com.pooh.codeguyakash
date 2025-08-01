@@ -4,32 +4,32 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  ToastAndroid,
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { logout, getUserData } from '../api/modules/authApi';
+import { useToast } from '../context/ToastContext';
 
 const Profile = ({ navigation }: any) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
     userData();
+    showToast('Welcome to your profile!');
   }, [navigation]);
 
   async function userData() {
     setLoading(true);
     let userId = String(await AsyncStorage.getItem('userId'));
     try {
-      console.log(userId);
       let response = await getUserData(userId);
-      console.log(response);
-      console.log(response.success);
+
       const { user } = response.data;
       if (response.success && response.data) {
         setUser(user);
-        console.log(user);
+        console.log('User data fetched successfully:', user);
       }
       setLoading(false);
     } catch (error: any) {
@@ -46,10 +46,11 @@ const Profile = ({ navigation }: any) => {
 
       setUser(null);
       await AsyncStorage.clear();
-      ToastAndroid.show('Logout successful', ToastAndroid.SHORT);
+      showToast('Logout successful!');
       navigation.navigate('Login');
     } catch (error: any) {
       console.error('Logout failed:', error.message);
+      showToast('Logout failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -95,7 +96,7 @@ const Profile = ({ navigation }: any) => {
             </View>
 
             <Text> {user.email}</Text>
-            <Text> {user.role}</Text>
+
             <Text> {user.uuid}</Text>
           </View>
         ) : (
@@ -143,9 +144,9 @@ const styles = StyleSheet.create({
   loginButton: {
     marginTop: 20,
     backgroundColor: '#ff0000ff',
-    paddingVertical: 10,
-    paddingHorizontal: 50,
-    borderRadius: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 20,
+    borderRadius: 5,
     alignItems: 'center',
   },
   loginText: {

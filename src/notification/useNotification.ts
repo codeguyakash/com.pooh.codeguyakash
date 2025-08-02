@@ -1,70 +1,76 @@
 import { useEffect } from 'react';
-import { PermissionsAndroid } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import { update } from '../api/modules/authApi';
 import { UpdateUserRequest } from '../types/apiTypes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const requestNotificationPermission = async () => {
-  const granted = await PermissionsAndroid.request(
-    PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
-  );
-  if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-    console.log('Notification permission granted');
-  } else {
-    console.log('Notification permission denied');
-  }
-};
-
-const getToken = async () => {
-  try {
-    let userId = String(await AsyncStorage.getItem('userId'));
-
-    let storedToken = String(await AsyncStorage.getItem('fcm_token'));
-    console.log('FCM Token:', storedToken, !storedToken);
-
-    const isValidStoredToken =
-      storedToken &&
-      storedToken !== 'null' &&
-      storedToken !== 'undefined' &&
-      storedToken.trim() !== '';
-
-    console.log(
-      'FCM Token from Storage:',
-      storedToken,
-      'Valid:',
-      isValidStoredToken
+  if (Platform.OS === 'android' && Platform.Version >= 33) {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
     );
-
-    if (isValidStoredToken) {
-      console.log('@FCM Token Already Exists: Skip API', storedToken);
-      return;
-    }
-
-    const token = await messaging().getToken();
-    if (token) {
-      const payload: UpdateUserRequest = {
-        name: '',
-        email: '',
-        role: '',
-        is_verified: null,
-        fcm_token: token,
-        id: Number(userId),
-      };
-
-      const res = await update(payload);
-      console.log('Updated Successfully:', res);
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('Notification permission granted');
     } else {
-      console.log('No FCM token available');
+      console.log('Notification permission denied');
     }
-  } catch (error) {
-    console.error('Error getting FCM token:', error);
+  } else {
+    console.log(
+      'Notification permission not required on this platform/version'
+    );
   }
 };
 
-export const useNotification = () => {
+export const useNotification = (onTokenReceived?: (token: string) => void) => {
   useEffect(() => {
-    requestNotificationPermission();
-    getToken();
+    const init = async () => {
+      await requestNotificationPermission();
+
+      try {
+        const userId = await AsyncStorage.getItem('userId');
+        const storedToken = await AsyncStorage.getItem('fcm_token');
+
+        const isValidStoredToken =
+          storedToken &&
+          storedToken !== 'null' &&
+          storedToken !== 'undefined' &&
+          storedToken.trim() !== '';
+
+        if (isValidStoredToken) {
+          console.log('FCM token already stored:', storedToken);
+          onTokenReceived?.(storedToken);
+          return;
+        }
+
+        const token = await messaging().getToken();
+        if (!token) {
+          console.log('No FCM token generated');
+          return;
+        }
+
+        console.log('🎯 New FCM token:', token);
+        await AsyncStorage.setItem('fcm_token', token);
+        onTokenReceived?.(token);
+
+        if (userId) {
+          const payload: UpdateUserRequest = {
+            id: Number(userId),
+            name: '',
+            email: '',
+            role: '',
+            is_verified: null,
+            fcm_token: token,
+          };
+
+          const res = await update(payload);
+          console.log('Token synced to API:', res);
+        }
+      } catch (error) {
+        console.error('Error in notification setup:', error);
+      }
+    };
+
+    init();
   }, []);
 };

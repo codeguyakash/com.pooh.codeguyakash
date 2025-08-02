@@ -17,11 +17,13 @@ import { useAppTheme } from '../context/ThemeContext';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 import { navigate } from '../navigation/navigationRef';
+import { useNotification } from '../notification/useNotification';
 
 const Register = () => {
-  const [email, setEmail] = useState('pixel@codeguyakash.in');
-  const [password, setPassword] = useState('Password@#123');
   const [name, setName] = useState('Pixel 8 Pro');
+  const [email, setEmail] = useState('pixel_demo@codeguyakash.in');
+  const [password, setPassword] = useState('Password@#123');
+  const [fcmToken, setFcmToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
 
@@ -30,14 +32,24 @@ const Register = () => {
 
   const { register: authRegister } = useAuth();
 
+  useNotification((token) => {
+    setFcmToken(token);
+  });
+
   const handleSignup = async (
     email: string,
     password: string,
     name: string,
+    fcmToken: string,
     setLoading: (v: boolean) => void
   ) => {
     setLoading(true);
-    const payload: RegisterRequest = { name, email, password };
+    const payload: RegisterRequest = {
+      name,
+      email,
+      password,
+      fcm_token: fcmToken,
+    };
 
     try {
       const response = await register(payload);
@@ -148,7 +160,9 @@ const Register = () => {
             styles.loginButton,
             { backgroundColor: loading ? theme.buttonDisabled : theme.button },
           ]}
-          onPress={() => handleSignup(email, password, name, setLoading)}
+          onPress={() =>
+            handleSignup(email, password, name, fcmToken, setLoading)
+          }
           disabled={loading}>
           {loading ? (
             <ActivityIndicator color="#fff" />

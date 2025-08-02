@@ -30,6 +30,7 @@ export interface RegisterRequest {
   name: string;
   email: string;
   password: string;
+  fcm_token?: string;
 }
 
 export interface RegisterResponse {
@@ -42,6 +43,7 @@ export interface RegisterResponse {
       uuid: string;
       is_verified: boolean;
       id: number;
+      fcm_token: string | null;
     };
     accessToken: string;
     refreshToken: string;

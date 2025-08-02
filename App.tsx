@@ -12,11 +12,13 @@ import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { ToastProvider } from './src/context/ToastContext';
 import Splash from './src/screens/Splash';
+import { useNotification } from './src/notification/useNotification';
 
 const Stack = createStackNavigator();
 
 function AppNavigation(): React.JSX.Element {
   const { isAuthenticated, loading } = useAuth();
+  useNotification();
 
   if (loading) return <Splash />;
   console.log(isAuthenticated);

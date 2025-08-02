@@ -7,6 +7,7 @@ export interface LoginResponse {
   statusCode: number;
   data: {
     user: {
+      fcm_token: string;
       id: number;
       uuid: string;
       name: string;
@@ -47,4 +48,13 @@ export interface RegisterResponse {
   };
   message: string;
   success: boolean;
+}
+
+export interface UpdateUserRequest {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  is_verified: boolean | null;
+  fcm_token: string | null;
 }

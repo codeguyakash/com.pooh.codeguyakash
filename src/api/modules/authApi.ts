@@ -1,9 +1,10 @@
-import { getMethod, postMethod } from '../httpMethods';
+import { getMethod, postMethod, putMethod } from '../httpMethods';
 import {
   LoginRequest,
   LoginResponse,
   RegisterRequest,
   RegisterResponse,
+  UpdateUserRequest,
 } from '../../types/apiTypes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -32,7 +33,7 @@ export const tokenRefresh = (payload: any): Promise<any> =>
 export const verifyAccessToken = async (
   accessToken: string
 ): Promise<boolean> => {
-  console.log('Verifying access token:', accessToken);
+  // console.log('Verifying access token:', accessToken);
   try {
     const response = await postMethod<LoginResponse>(
       '/auth/verify',
@@ -49,4 +50,11 @@ export const verifyAccessToken = async (
     console.error('Access token verification failed:', error);
     return false;
   }
+};
+
+///
+
+export const update = (payload: UpdateUserRequest): Promise<any> => {
+  const userId = payload.id;
+  return putMethod<UpdateUserRequest>(`/auth/user/update/${userId}`, payload);
 };

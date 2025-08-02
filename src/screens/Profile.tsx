@@ -9,11 +9,25 @@ import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { logout, getUserData } from '../api/modules/authApi';
 import { useToast } from '../context/ToastContext';
+import { getDeviceInfo } from '../utils/deviceInfo';
+import { navigate } from '../navigation/navigationRef';
 
 const Profile = ({ navigation }: any) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+
+  const [device, setDevice] = useState<any>(null);
+
   const { showToast } = useToast();
+
+  useEffect(() => {
+    (async () => {
+      const info = await getDeviceInfo();
+      console.log('Device Info:', info);
+      setDevice(info);
+    })();
+  }, []);
+
   //  const ws = new WebSocket(`wss://${SOCKET_BASE_URL}`);
   useEffect(() => {
     userData();
@@ -22,12 +36,14 @@ const Profile = ({ navigation }: any) => {
   async function userData() {
     setLoading(true);
     let userId = String(await AsyncStorage.getItem('userId'));
+
     try {
       let response = await getUserData(userId);
 
       const { user } = response.data;
       if (response.success && response.data) {
         setUser(user);
+        AsyncStorage.setItem('fcm_token', user.fcm_token || '');
       }
       setLoading(false);
     } catch (error: any) {
@@ -45,7 +61,7 @@ const Profile = ({ navigation }: any) => {
       setUser(null);
       await AsyncStorage.clear();
       showToast('Logout successful!');
-      navigation.navigate('Login');
+      navigate('Login');
     } catch (error: any) {
       console.error('Logout failed:', error.message);
       showToast('Logout failed. Please try again.');
@@ -94,8 +110,16 @@ const Profile = ({ navigation }: any) => {
             </View>
 
             <Text> {user.email}</Text>
-
             <Text> {user.uuid}</Text>
+            <Text>Current Device Info</Text>
+            <View>
+              {Object.entries(device).map(([key, value]) => (
+                <Text style={styles.text} key={key}>
+                  {key.replace(/_/g, ' ')?.toUpperCase()}
+                  :-------------------- {String(value)}
+                </Text>
+              ))}
+            </View>
           </View>
         ) : (
           <Text style={{ marginTop: 20 }}>No user data available</Text>
@@ -123,6 +147,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     backgroundColor: '#f8f9fa',
   },
+
   Avatar: {
     width: 100,
     height: 100,
@@ -162,6 +187,11 @@ const styles = StyleSheet.create({
   verifiedText: {
     fontSize: 12,
     marginHorizontal: 10,
+  },
+  text: {
+    fontSize: 14,
+    color: '#333',
+    marginVertical: 2,
   },
 });
 

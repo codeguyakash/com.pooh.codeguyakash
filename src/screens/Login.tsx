@@ -16,6 +16,7 @@ import { LoginRequest } from '../types/apiTypes';
 import { login } from '../api/modules/authApi';
 import { useAppTheme } from '../context/ThemeContext';
 import { useToast } from '../context/ToastContext';
+import { navigate } from '../navigation/navigationRef';
 
 const Login = () => {
   const [email, setEmail] = useState('suraj@codeguyakash.in');
@@ -23,7 +24,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
 
-  const navigation: any = useNavigation();
   const theme = useAppTheme();
   const { showToast } = useToast();
 
@@ -47,7 +47,7 @@ const Login = () => {
 
         const message = response.message || 'Login successful';
         showToast(message);
-        navigation.navigate('Profile' as never);
+        navigate('Profile');
       } else {
         const errorMsg = response.message || 'Login failed';
         showToast(errorMsg);
@@ -142,7 +142,7 @@ const Login = () => {
           Don't have an account?{' '}
           <Text
             style={{ color: theme.button, fontWeight: 'bold' }}
-            onPress={() => navigation.navigate('Register')}>
+            onPress={() => navigate('Register')}>
             Register
           </Text>
         </Text>

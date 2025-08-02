@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "498318248913",
+    "project_id": "pooh-df55b",
+    "storage_bucket": "pooh-df55b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498318248913:android:f11ed80cd88990dfaceef0",
+        "android_client_info": {
+          "package_name": "com.dapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeyrEi_kF6m8XxLcDXmeBNubjl1YqhgaM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

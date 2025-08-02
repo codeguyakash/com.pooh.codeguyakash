@@ -13,6 +13,7 @@ interface DeviceInfoType {
   total_memory: string;
   free_disk_storage: string;
   total_disk_capacity: string;
+  fcm_token: string | null;
 }
 
 const formatBytesToGB = (bytes: number): string => {
@@ -35,5 +36,6 @@ export const getDeviceInfo = async (): Promise<DeviceInfoType> => {
     total_disk_capacity: formatBytesToGB(
       await DeviceInfo.getTotalDiskCapacity()
     ),
+    fcm_token: null, // FCM token will be set later
   };
 };

@@ -25,6 +25,10 @@ const Profile = ({ navigation }: any) => {
   useEffect(() => {
     (async () => {
       const info = await getDeviceInfo();
+      let fcm_token: string = String(await AsyncStorage.getItem('fcm_token'));
+      if (fcm_token) {
+        info.fcm_token = fcm_token;
+      }
       setDevice(info);
     })();
   }, []);

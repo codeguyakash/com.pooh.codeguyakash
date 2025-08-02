@@ -4,7 +4,6 @@ import messaging from '@react-native-firebase/messaging';
 import { update } from '../api/modules/authApi';
 import { UpdateUserRequest } from '../types/apiTypes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useToast } from '../context/ToastContext';
 
 const requestNotificationPermission = async () => {
   const granted = await PermissionsAndroid.request(
@@ -18,13 +17,27 @@ const requestNotificationPermission = async () => {
 };
 
 const getToken = async () => {
-  //   const { showToast } = useToast();
   try {
     let userId = String(await AsyncStorage.getItem('userId'));
-    let fcm_token = String(await AsyncStorage.getItem('fcm_token'));
 
-    if (fcm_token) {
-      console.log('FCM token already exists:', fcm_token);
+    let storedToken = String(await AsyncStorage.getItem('fcm_token'));
+    console.log('FCM Token:', storedToken, !storedToken);
+
+    const isValidStoredToken =
+      storedToken &&
+      storedToken !== 'null' &&
+      storedToken !== 'undefined' &&
+      storedToken.trim() !== '';
+
+    console.log(
+      'FCM Token from Storage:',
+      storedToken,
+      'Valid:',
+      isValidStoredToken
+    );
+
+    if (isValidStoredToken) {
+      console.log('@FCM Token Already Exists: Skip API', storedToken);
       return;
     }
 
@@ -40,13 +53,12 @@ const getToken = async () => {
       };
 
       const res = await update(payload);
-      console.log('Updated successfully:', res);
+      console.log('Updated Successfully:', res);
     } else {
       console.log('No FCM token available');
     }
   } catch (error) {
     console.error('Error getting FCM token:', error);
-    // showToast('Failed to update FCM token. Please try again later.');
   }
 };
 

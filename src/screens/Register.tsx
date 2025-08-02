@@ -9,24 +9,26 @@ import {
   SafeAreaView,
 } from 'react-native';
 import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../assets/icons/logo.png';
 import { RegisterRequest } from '../types/apiTypes';
 import { register } from '../api/modules/authApi';
 import { useAppTheme } from '../context/ThemeContext';
 import { useToast } from '../context/ToastContext';
+import { useAuth } from '../context/AuthContext';
+import { navigate } from '../navigation/navigationRef';
 
 const Register = () => {
-  const [email, setEmail] = useState('suraj@codeguyakash.in');
+  const [email, setEmail] = useState('pixel@codeguyakash.in');
   const [password, setPassword] = useState('Password@#123');
-  const [name, setName] = useState('Suraj');
+  const [name, setName] = useState('Pixel 8 Pro');
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
 
-  const navigation: any = useNavigation();
   const theme = useAppTheme();
   const { showToast } = useToast();
+
+  const { register: authRegister } = useAuth();
 
   const handleSignup = async (
     email: string,
@@ -42,14 +44,10 @@ const Register = () => {
       console.log('Response from register:', response);
       if (response.success && response.data) {
         const { accessToken, refreshToken, user } = response.data;
-
-        await AsyncStorage.setItem('accessToken', accessToken);
-        await AsyncStorage.setItem('refreshToken', refreshToken);
+        await authRegister(accessToken, refreshToken);
         await AsyncStorage.setItem('userId', Number(user.id).toString());
-
         const message = response.message || 'Registration successful';
         showToast(message);
-        navigation.navigate('Profile' as never);
       } else {
         console.error('Registration failed:', response);
         const errorMsg = response.message || 'Registration failed';
@@ -163,7 +161,7 @@ const Register = () => {
           Already have an account?{' '}
           <Text
             style={{ color: theme.button, fontWeight: 'bold' }}
-            onPress={() => navigation.navigate('Login')}>
+            onPress={() => navigate('Login')}>
             Login
           </Text>
         </Text>

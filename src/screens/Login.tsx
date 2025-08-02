@@ -19,7 +19,7 @@ import { navigate } from '../navigation/navigationRef';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
-  const [email, setEmail] = useState('suraj@codeguyakash.in');
+  const [email, setEmail] = useState('pixel@codeguyakash.in');
   const [password, setPassword] = useState('Password@#123');
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);

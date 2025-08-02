@@ -1,6 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { tokenRefresh, verifyAccessToken } from '../api/modules/authApi';
+import {
+  tokenRefresh,
+  verifyAccessToken,
+  register,
+} from '../api/modules/authApi';
 import { useToast } from './ToastContext';
 import { navigate } from '../navigation/navigationRef';
 
@@ -10,6 +14,7 @@ interface AuthContextType {
   refreshToken: string | null;
   login: (access: string, refresh: string) => Promise<void>;
   logout: () => Promise<void>;
+  register: (access: string, refresh: string) => Promise<void>;
   loading: boolean;
 }
 
@@ -43,6 +48,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setAccessToken(null);
     setRefreshToken(null);
     setIsAuthenticated(false);
+  };
+  const register = async (access: string, refresh: string) => {
+    await AsyncStorage.setItem('accessToken', access);
+    await AsyncStorage.setItem('refreshToken', refresh);
+    setAccessToken(access);
+    setRefreshToken(refresh);
+    setIsAuthenticated(true);
   };
 
   const checkAuth = async () => {
@@ -98,6 +110,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         refreshToken,
         login,
         logout,
+        register,
         loading,
       }}>
       {children}

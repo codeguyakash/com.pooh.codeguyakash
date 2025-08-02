@@ -36,7 +36,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setAccessToken(access);
     setRefreshToken(refresh);
     setIsAuthenticated(true);
-    navigate('Profile');
   };
 
   const logout = async () => {
@@ -44,8 +43,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setAccessToken(null);
     setRefreshToken(null);
     setIsAuthenticated(false);
-    showToast('Logged out');
-    navigate('Login');
   };
 
   const checkAuth = async () => {
@@ -63,7 +60,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated(true);
         navigate('Profile');
       } else {
-        throw new Error('Access token invalid');
+        console.log('Access token invalid, trying refresh...');
+        showToast('Session expired. Please log in again.');
       }
     } catch (error) {
       console.warn('Access token failed. Trying refresh...');

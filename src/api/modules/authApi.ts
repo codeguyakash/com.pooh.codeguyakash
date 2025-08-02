@@ -44,7 +44,7 @@ export const verifyAccessToken = async (
         },
       }
     );
-    console.log('Access token verification response:', response);
+    // console.log('Access token verification response:', response);
     return response.success;
   } catch (error) {
     console.error('Access token verification failed:', error);

@@ -22,7 +22,6 @@ const getToken = async () => {
   try {
     let userId = String(await AsyncStorage.getItem('userId'));
     let fcm_token = String(await AsyncStorage.getItem('fcm_token'));
-    console.log('fcm_token:', fcm_token);
 
     if (fcm_token) {
       console.log('FCM token already exists:', fcm_token);

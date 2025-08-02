@@ -7,6 +7,7 @@ import { navigationRef } from './src/navigation/navigationRef';
 import Profile from './src/screens/Profile';
 import Login from './src/screens/Login';
 import Register from './src/screens/Register';
+import Home from './src/screens/Home';
 
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { ThemeProvider } from './src/context/ThemeContext';
@@ -26,7 +27,10 @@ function AppNavigation(): React.JSX.Element {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {isAuthenticated ? (
-        <Stack.Screen name="Profile" component={Profile} />
+        <>
+          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="Home" component={Home} />
+        </>
       ) : (
         <>
           <Stack.Screen name="Login" component={Login} />

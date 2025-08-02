@@ -8,8 +8,7 @@ import {
   Image,
   SafeAreaView,
 } from 'react-native';
-import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../assets/icons/logo.png';
 import { LoginRequest } from '../types/apiTypes';
@@ -17,6 +16,7 @@ import { login } from '../api/modules/authApi';
 import { useAppTheme } from '../context/ThemeContext';
 import { useToast } from '../context/ToastContext';
 import { navigate } from '../navigation/navigationRef';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('suraj@codeguyakash.in');
@@ -26,6 +26,12 @@ const Login = () => {
 
   const theme = useAppTheme();
   const { showToast } = useToast();
+
+  const { login: authLogin } = useAuth();
+
+  useEffect(() => {
+    (async () => {})();
+  }, []);
 
   const handleLogin = async (
     email: string,
@@ -41,13 +47,11 @@ const Login = () => {
       if (response.success && response.data) {
         const { accessToken, refreshToken, user } = response.data;
 
-        await AsyncStorage.setItem('accessToken', accessToken);
-        await AsyncStorage.setItem('refreshToken', refreshToken);
+        authLogin(accessToken, refreshToken);
         await AsyncStorage.setItem('userId', Number(user.id).toString());
 
         const message = response.message || 'Login successful';
         showToast(message);
-        navigate('Profile');
       } else {
         const errorMsg = response.message || 'Login failed';
         showToast(errorMsg);

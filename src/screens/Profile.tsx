@@ -10,20 +10,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { logout, getUserData } from '../api/modules/authApi';
 import { useToast } from '../context/ToastContext';
 import { getDeviceInfo } from '../utils/deviceInfo';
-import { navigate } from '../navigation/navigationRef';
+
+import { useAuth } from '../context/AuthContext';
 
 const Profile = ({ navigation }: any) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   const [device, setDevice] = useState<any>(null);
+  const { logout: authLogout } = useAuth();
 
   const { showToast } = useToast();
 
   useEffect(() => {
     (async () => {
       const info = await getDeviceInfo();
-      console.log('Device Info:', info);
       setDevice(info);
     })();
   }, []);
@@ -56,12 +57,9 @@ const Profile = ({ navigation }: any) => {
 
     try {
       await logout();
-      console.log('Logout successful');
-
+      authLogout();
       setUser(null);
-      await AsyncStorage.clear();
       showToast('Logout successful!');
-      navigate('Login');
     } catch (error: any) {
       console.error('Logout failed:', error.message);
       showToast('Logout failed. Please try again.');

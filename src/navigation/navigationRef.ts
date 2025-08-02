@@ -17,6 +17,6 @@ export function navigate<Name extends keyof RootStackParamList>(
 ): void {
   if (navigationRef.isReady()) {
     // @ts-expect-error – TypeScript inference bug, safe to ignore
-    navigationRef.navigate(...args);
+    navigationRef.navigate(...args);  
   }
 }

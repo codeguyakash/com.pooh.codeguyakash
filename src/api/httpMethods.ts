@@ -1,11 +1,12 @@
 import axiosInstance from './axiosInstance';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { BASE_URL } from '../env/base_url';
 
 export const getMethod = async <T>(
   endpoint: string,
   config: AxiosRequestConfig = {}
 ): Promise<T> => {
-  console.log('Endpoint:', endpoint);
+  console.log('Endpoint:', BASE_URL, endpoint);
   const response: AxiosResponse<T> = await axiosInstance.get(endpoint, config);
   return response.data;
 };
@@ -15,7 +16,7 @@ export const postMethod = async <T>(
   data: any,
   config: AxiosRequestConfig = {}
 ): Promise<T> => {
-  console.log('Endpoint:', endpoint, 'Data:', data);
+  console.log('Endpoint:', BASE_URL, endpoint, 'Data:', data);
   const response: AxiosResponse<T> = await axiosInstance.post(
     endpoint,
     data,
@@ -29,7 +30,7 @@ export const putMethod = async <T>(
   data: any,
   config: AxiosRequestConfig = {}
 ): Promise<T> => {
-  console.log('Endpoint:', endpoint, 'Data:', data);
+  console.log('Endpoint:', BASE_URL, endpoint, 'Data:', data);
   const response: AxiosResponse<T> = await axiosInstance.put(
     endpoint,
     data,
@@ -42,7 +43,7 @@ export const deleteMethod = async <T>(
   endpoint: string,
   config: AxiosRequestConfig = {}
 ): Promise<T> => {
-  console.log('Endpoint:', endpoint);
+  console.log('Endpoint:', BASE_URL, endpoint);
   const response: AxiosResponse<T> = await axiosInstance.delete(
     endpoint,
     config

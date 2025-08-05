@@ -20,8 +20,8 @@ import { navigate } from '../navigation/navigationRef';
 import { useNotification } from '../notification/useNotification';
 
 const Register = () => {
-  const [name, setName] = useState('Pixel 8 Pro');
-  const [email, setEmail] = useState('pixel_demo@codeguyakash.in');
+  const [name, setName] = useState('Akash (Pixel)');
+  const [email, setEmail] = useState('pixel@codeguyakash.in');
   const [password, setPassword] = useState('Password@#123');
   const [fcmToken, setFcmToken] = useState('');
   const [loading, setLoading] = useState(false);
@@ -56,6 +56,9 @@ const Register = () => {
       console.log('Response from register:', response);
       if (response.success && response.data) {
         const { accessToken, refreshToken, user } = response.data;
+
+        console.log(accessToken, refreshToken, user);
+
         await authRegister(accessToken, refreshToken);
         await AsyncStorage.setItem('userId', Number(user.id).toString());
         const message = response.message || 'Registration successful';

@@ -71,6 +71,10 @@ const Profile = ({ navigation }: any) => {
       setLoading(false);
     }
   };
+  const handleSetToken = async () => {
+    showToast('Setting token...');
+    await AsyncStorage.setItem('accessToken', 'asdjaksdhkahsdkjhaksjhdkhskh');
+  };
 
   return (
     <View style={styles.container}>
@@ -122,6 +126,12 @@ const Profile = ({ navigation }: any) => {
                 </Text>
               ))}
             </View>
+            <TouchableOpacity
+              style={[styles.loginButton, { backgroundColor: '#53A04A' }]}
+              onPress={handleSetToken}
+              disabled={loading}>
+              <Text style={styles.loginText}>SET TOKEN</Text>
+            </TouchableOpacity>
           </View>
         ) : (
           <Text style={{ marginTop: 20 }}>No user data available</Text>

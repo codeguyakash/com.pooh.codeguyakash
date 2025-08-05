@@ -57,6 +57,58 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsAuthenticated(true);
   };
 
+  const checkAuthOld = async () => {
+    try {
+      const { access, refresh } = await loadTokens();
+
+      if (!access || !refresh) {
+        return logout();
+      }
+
+      const isValid = await verifyAccessToken(access);
+
+      if (isValid) {
+        setAccessToken(access);
+        setRefreshToken(refresh);
+        setIsAuthenticated(true);
+        navigate('Profile');
+        return;
+      }
+
+      // If invalid but no error thrown → refresh here
+      console.log('Access token invalid, trying refresh...');
+      await handleTokenRefresh(refresh);
+    } catch (error) {
+      console.warn('Access token verification threw error, trying refresh...');
+      const storedRefresh = await AsyncStorage.getItem('refreshToken');
+      await handleTokenRefresh(storedRefresh);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTokenRefresh = async (refreshTokenVal: string | null) => {
+    if (!refreshTokenVal) {
+      showToast('Session expired. Please log in again.');
+      return logout();
+    }
+
+    try {
+      const response = await tokenRefresh({ refreshToken: refreshTokenVal });
+      const newAccess = response.data?.data?.accessToken;
+      const newRefresh = response.data?.data?.refreshToken;
+
+      if (!newAccess || !newRefresh) throw new Error('Invalid refresh data');
+
+      await login(newAccess, newRefresh);
+      showToast('Session refreshed.');
+    } catch (err) {
+      console.error('Refresh failed:', err);
+      showToast('Session expired. Please log in again.');
+      logout();
+    }
+  };
+
   const checkAuth = async () => {
     try {
       const { access, refresh } = await loadTokens();

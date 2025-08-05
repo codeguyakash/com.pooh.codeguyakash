@@ -15,8 +15,9 @@ import { LoginRequest } from '../types/apiTypes';
 import { login } from '../api/modules/authApi';
 import { useAppTheme } from '../context/ThemeContext';
 import { useToast } from '../context/ToastContext';
-import { navigate } from '../navigation/navigationRef';
+import { navigate, navigationRef } from '../navigation/navigationRef';
 import { useAuth } from '../context/AuthContext';
+import { useSocket } from '../context/SocketContext';
 
 const Login = () => {
   const [email, setEmail] = useState('pixel@codeguyakash.in');
@@ -26,11 +27,13 @@ const Login = () => {
 
   const theme = useAppTheme();
   const { showToast } = useToast();
-
+  const { sendMessage } = useSocket();
   const { login: authLogin } = useAuth();
 
   useEffect(() => {
-    (async () => {})();
+    sendMessage({
+      message: `${navigationRef.getCurrentRoute()?.name} Rendered`,
+    });
   }, []);
 
   const handleLogin = async (

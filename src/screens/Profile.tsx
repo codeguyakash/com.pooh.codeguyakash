@@ -12,6 +12,8 @@ import { useToast } from '../context/ToastContext';
 import { getDeviceInfo } from '../utils/deviceInfo';
 
 import { useAuth } from '../context/AuthContext';
+import { useSocket } from '../context/SocketContext';
+import { navigate, navigationRef } from '../navigation/navigationRef';
 
 const Profile = ({ navigation }: any) => {
   const [user, setUser] = useState<any>(null);
@@ -19,10 +21,14 @@ const Profile = ({ navigation }: any) => {
 
   const [device, setDevice] = useState<any>(null);
   const { logout: authLogout } = useAuth();
+  const { socket, sendMessage } = useSocket();
 
   const { showToast } = useToast();
 
   useEffect(() => {
+    sendMessage({
+      message: `${navigationRef.getCurrentRoute()?.name} Rendered`,
+    });
     (async () => {
       const info = await getDeviceInfo();
       let fcm_token: string = String(await AsyncStorage.getItem('fcm_token'));
@@ -33,7 +39,6 @@ const Profile = ({ navigation }: any) => {
     })();
   }, []);
 
-  //  const ws = new WebSocket(`wss://${SOCKET_BASE_URL}`);
   useEffect(() => {
     userData();
   }, [navigation]);
@@ -71,9 +76,16 @@ const Profile = ({ navigation }: any) => {
       setLoading(false);
     }
   };
-  const handleSetToken = async () => {
-    showToast('Setting token...');
-    await AsyncStorage.setItem('accessToken', 'asdjaksdhkahsdkjhaksjhdkhskh');
+
+  const handleGoToChat = () => {
+    console.log('CLICKED CHAT');
+    navigate('Chat');
+    if (socket && socket.connected) {
+      console.log('✅ Socket is connected, navigating to Chat');
+      navigate('Chat');
+    } else {
+      showToast('Socket not connected. Please wait...');
+    }
   };
 
   return (
@@ -128,9 +140,8 @@ const Profile = ({ navigation }: any) => {
             </View>
             <TouchableOpacity
               style={[styles.loginButton, { backgroundColor: '#53A04A' }]}
-              onPress={handleSetToken}
-              disabled={loading}>
-              <Text style={styles.loginText}>SET TOKEN</Text>
+              onPress={handleGoToChat}>
+              <Text style={styles.loginText}>CHAT</Text>
             </TouchableOpacity>
           </View>
         ) : (

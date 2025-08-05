@@ -7,7 +7,7 @@ interface DeviceInfoType {
   device_p_name: string;
   device_model: string;
   device_version: string;
-  device_serial: string;
+  // device_serial: string;
   device_uuid: string;
   device_manufacturer: string;
   total_memory: string;
@@ -28,7 +28,7 @@ export const getDeviceInfo = async (): Promise<DeviceInfoType> => {
     device_p_name: DeviceInfo.getApplicationName(),
     device_model: DeviceInfo.getModel(),
     device_version: DeviceInfo.getSystemVersion(),
-    device_serial: await DeviceInfo.getSerialNumber(),
+    // device_serial: await DeviceInfo.getSerialNumber(),
     device_uuid: await DeviceInfo.getUniqueId(),
     device_manufacturer: await DeviceInfo.getManufacturer(),
     total_memory: formatBytesToGB(await DeviceInfo.getTotalMemory()),

@@ -16,8 +16,9 @@ import { register } from '../api/modules/authApi';
 import { useAppTheme } from '../context/ThemeContext';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
-import { navigate } from '../navigation/navigationRef';
+import { navigate, navigationRef } from '../navigation/navigationRef';
 import { useNotification } from '../notification/useNotification';
+import { useSocket } from '../context/SocketContext';
 
 const Register = () => {
   const [name, setName] = useState('Akash (Pixel)');
@@ -29,8 +30,14 @@ const Register = () => {
 
   const theme = useAppTheme();
   const { showToast } = useToast();
-
+  const { sendMessage } = useSocket();
   const { register: authRegister } = useAuth();
+
+  useEffect(() => {
+    sendMessage({
+      message: `${navigationRef.getCurrentRoute()?.name} Rendered`,
+    });
+  }, []);
 
   useNotification((token) => {
     setFcmToken(token);

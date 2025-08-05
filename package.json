@@ -1,5 +1,5 @@
 {
-  "name": "dapp",
+  "name": "pooh.codeguyakash",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -21,7 +21,6 @@
     "react-native": "0.79.2",
     "react-native-device-info": "^14.0.4",
     "react-native-gesture-handler": "^2.25.0",
-    "react-native-push-notification": "^8.1.1",
     "react-native-reanimated": "^3.17.5",
     "react-native-safe-area-context": "^5.4.1",
     "react-native-screens": "^4.10.0",

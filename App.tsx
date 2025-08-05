@@ -4,55 +4,45 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { navigationRef } from './src/navigation/navigationRef';
 
-import Profile from './src/screens/Profile';
-import Login from './src/screens/Login';
-import Register from './src/screens/Register';
-import Home from './src/screens/Home';
-
-import { AuthProvider, useAuth } from './src/context/AuthContext';
-import { ThemeProvider } from './src/context/ThemeContext';
-import { ToastProvider } from './src/context/ToastContext';
-import Splash from './src/screens/Splash';
-import { useNotification } from './src/notification/useNotification';
-
 import messaging from '@react-native-firebase/messaging';
 
-import PushNotification from 'react-native-push-notification';
+import ChatScreen from './src/screens/ChatScreen';
+import Register from './src/screens/Register';
+import Profile from './src/screens/Profile';
+import Splash from './src/screens/Splash';
+import Login from './src/screens/Login';
+import Home from './src/screens/Home';
 
-console.warn = () => null; // Suppress warnings
+import { useNotification } from './src/notification/useNotification';
+import { AuthProvider, useAuth } from './src/context/AuthContext';
+import { SocketProvider } from './src/context/SocketContext';
+import { ThemeProvider } from './src/context/ThemeContext';
+import { ToastProvider } from './src/context/ToastContext';
+
+console.warn = () => null;
+
 const Stack = createStackNavigator();
 
 function AppNavigation(): React.JSX.Element {
   const { isAuthenticated, loading } = useAuth();
   useNotification();
 
-  // ===== Setup Foreground Push Handling =====
   useEffect(() => {
     async function setupChannel() {
-      PushNotification.createChannel(
-        {
-          channelId: 'default-channel-id',
-          channelName: 'Default Channel',
-          channelDescription: 'A default channel',
-          importance: 4,
-          vibrate: true,
-        },
-        (created) => console.log(`🔔 Notification channel created: ${created}`)
+      await messaging().registerDeviceForRemoteMessages();
+      await messaging().setBackgroundMessageHandler(
+        async (remoteMessage: any) => {
+          console.log('📩 Background FCM:', remoteMessage);
+        }
       );
     }
     setupChannel();
 
     const unsubscribe = messaging().onMessage(async (remoteMessage: any) => {
       console.log('📩 Foreground FCM:', remoteMessage);
-
-      PushNotification.localNotification({
-        channelId: 'default-channel-id',
-        title: remoteMessage.notification?.title ?? 'Notification',
-        message: remoteMessage.notification?.body ?? 'You have a new message',
-        playSound: true,
-        soundName: 'default',
-        importance: 'high',
-        vibrate: true,
+      console.log('FCM Message Data:', {
+        body: remoteMessage.notification.body,
+        title: remoteMessage.notification.title,
       });
     });
 
@@ -67,6 +57,7 @@ function AppNavigation(): React.JSX.Element {
       {isAuthenticated ? (
         <>
           <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="Chat" component={ChatScreen} />
           <Stack.Screen name="Home" component={Home} />
         </>
       ) : (
@@ -81,15 +72,17 @@ function AppNavigation(): React.JSX.Element {
 
 function App(): React.JSX.Element {
   return (
-    <ToastProvider>
-      <ThemeProvider>
-        <NavigationContainer ref={navigationRef}>
-          <AuthProvider>
-            <AppNavigation />
-          </AuthProvider>
-        </NavigationContainer>
-      </ThemeProvider>
-    </ToastProvider>
+    <SocketProvider>
+      <ToastProvider>
+        <ThemeProvider>
+          <NavigationContainer ref={navigationRef}>
+            <AuthProvider>
+              <AppNavigation />
+            </AuthProvider>
+          </NavigationContainer>
+        </ThemeProvider>
+      </ToastProvider>
+    </SocketProvider>
   );
 }
 

@@ -4,6 +4,8 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   Profile: undefined;
+  Home: undefined;
+  Chat: undefined;
 };
 
 // Properly typed navigation reference
@@ -17,6 +19,6 @@ export function navigate<Name extends keyof RootStackParamList>(
 ): void {
   if (navigationRef.isReady()) {
     // @ts-expect-error – TypeScript inference bug, safe to ignore
-    navigationRef.navigate(...args);  
+    navigationRef.navigate(...args);
   }
 }

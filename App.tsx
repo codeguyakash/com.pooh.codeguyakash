@@ -17,6 +17,9 @@ import { useNotification } from './src/notification/useNotification';
 
 import messaging from '@react-native-firebase/messaging';
 
+import PushNotification from 'react-native-push-notification';
+
+console.warn = () => null; // Suppress warnings
 const Stack = createStackNavigator();
 
 function AppNavigation(): React.JSX.Element {
@@ -26,15 +29,30 @@ function AppNavigation(): React.JSX.Element {
   // ===== Setup Foreground Push Handling =====
   useEffect(() => {
     async function setupChannel() {
-      console.log('NOTIFICATION SETUP');
+      PushNotification.createChannel(
+        {
+          channelId: 'default-channel-id',
+          channelName: 'Default Channel',
+          channelDescription: 'A default channel',
+          importance: 4,
+          vibrate: true,
+        },
+        (created) => console.log(`🔔 Notification channel created: ${created}`)
+      );
     }
     setupChannel();
 
     const unsubscribe = messaging().onMessage(async (remoteMessage: any) => {
       console.log('📩 Foreground FCM:', remoteMessage);
-      console.log('FCM Message Data:', {
-        body: remoteMessage.notification.body,
-        title: remoteMessage.notification.title,
+
+      PushNotification.localNotification({
+        channelId: 'default-channel-id',
+        title: remoteMessage.notification?.title ?? 'Notification',
+        message: remoteMessage.notification?.body ?? 'You have a new message',
+        playSound: true,
+        soundName: 'default',
+        importance: 'high',
+        vibrate: true,
       });
     });
 

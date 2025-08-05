@@ -16,7 +16,3 @@ npx react-native run-android
 adb install app/build/outputs/apk/release/app-release.apk
 
 adb -s RZCW515XN3H install path/to/your-app.apk
-
-
-
-c

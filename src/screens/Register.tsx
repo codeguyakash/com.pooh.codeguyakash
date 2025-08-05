@@ -8,7 +8,7 @@ import {
   Image,
   SafeAreaView,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../assets/icons/logo.png';
 import { RegisterRequest } from '../types/apiTypes';

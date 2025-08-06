@@ -50,8 +50,7 @@ function AppNavigation(): React.JSX.Element {
     return unsubscribe;
   }, []);
 
-  if (true) return <Splash />;
-  console.log(isAuthenticated);
+  if (loading) return <Splash />;
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

@@ -50,7 +50,7 @@ function AppNavigation(): React.JSX.Element {
     return unsubscribe;
   }, []);
 
-  if (loading) return <Splash />;
+  if (true) return <Splash />;
   console.log(isAuthenticated);
 
   return (

@@ -1,39 +1,30 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Animated, StyleSheet, Text, Easing } from 'react-native';
+import { View, Animated, StyleSheet, Easing } from 'react-native';
+import { useEffect, useRef } from 'react';
 import { useAppTheme } from '../context/ThemeContext';
 import logo from '../assets/icons/logo.png';
 
 const Splash = () => {
   const theme = useAppTheme();
   const bounceValue = useRef(new Animated.Value(0)).current;
-  const [dotCount, setDotCount] = useState(0);
 
   useEffect(() => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(bounceValue, {
-          toValue: -20,
+          toValue: -10,
           duration: 300,
           easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,
         }),
         Animated.timing(bounceValue, {
-          toValue: 10,
+          toValue: 5,
           duration: 300,
           easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,
         }),
       ])
     ).start();
-
-    const interval = setInterval(() => {
-      setDotCount((prev) => (prev + 1) % 4);
-    }, 500);
-
-    return () => clearInterval(interval);
   }, []);
-
-  const dots = '.'.repeat(dotCount).padEnd(3, ' ');
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
@@ -46,10 +37,6 @@ const Splash = () => {
           },
         ]}
       />
-      <Text style={[styles.text, { color: theme.text }]}>
-        Loading
-        <Text style={styles.dots}>{dots}</Text>
-      </Text>
     </View>
   );
 };
@@ -62,20 +49,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {
-    marginTop: 12,
-    fontSize: 16,
-    fontFamily: 'Inter-Regular',
-    textAlign: 'center',
-    color: '#222',
-  },
-  dots: {
-    fontFamily: 'Inter-Regular',
-  },
+
   logo: {
-    width: 100,
-    height: 100,
-    marginBottom: 20,
-    borderRadius: 50,
+    width: 120,
+    height: 120,
+    marginBottom: 10,
   },
 });

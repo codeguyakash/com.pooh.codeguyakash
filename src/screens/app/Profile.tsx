@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,6 +16,10 @@ import { useAuth } from '../../context/AuthContext';
 import { useSocket } from '../../context/SocketContext';
 import { navigate, navigationRef } from '../../navigation/navigationRef';
 
+import verified from '../../assets/icons/verified.png';
+import logo from '../../assets/icons/logo.png';
+import { useAppTheme } from '../../context/ThemeContext';
+
 const Profile = ({ navigation }: any) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -22,8 +27,8 @@ const Profile = ({ navigation }: any) => {
   const [device, setDevice] = useState<any>(null);
   const { logout: authLogout } = useAuth();
   const { socket, sendMessage } = useSocket();
-
   const { showToast } = useToast();
+  const theme = useAppTheme();
 
   useEffect(() => {
     sendMessage({
@@ -92,13 +97,8 @@ const Profile = ({ navigation }: any) => {
     <View style={styles.container}>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         {user ? (
-          <View style={{ alignItems: 'center', marginTop: 20 }}>
-            {/* Avatar */}
-            <View style={styles.Avatar}>
-              <Text style={styles.AvatarText}>
-                {user?.name?.charAt(0).toUpperCase()}
-              </Text>
-            </View>
+          <View style={{ alignItems: 'center', marginTop: 10 }}>
+            <Image source={logo} style={styles.logo} />
             <View
               style={{
                 flexDirection: 'row',
@@ -114,15 +114,17 @@ const Profile = ({ navigation }: any) => {
                 }}>
                 {user.name}
               </Text>
-              <View
-                style={[
-                  styles.verifiedBadge,
-                  user.is_verified
-                    ? { borderColor: '#4A96FF', backgroundColor: '#CCE1FF' }
-                    : { borderColor: '#53A04A', backgroundColor: '#CEE4CC' },
-                ]}>
-                <Text style={styles.verifiedText}>
-                  {user.is_verified ? 'Verified' : 'Verify'}
+
+              <View>
+                <Text>
+                  {user.is_verified ? (
+                    <Image
+                      source={verified}
+                      style={{ width: 20, height: 20, marginLeft: 5 }}
+                    />
+                  ) : (
+                    'Verify'
+                  )}
                 </Text>
               </View>
             </View>
@@ -141,7 +143,7 @@ const Profile = ({ navigation }: any) => {
             <TouchableOpacity
               style={[styles.loginButton, { backgroundColor: '#53A04A' }]}
               onPress={handleGoToChat}>
-              <Text style={styles.loginText}>CHAT</Text>
+              <Text style={styles.loginOut}>CHAT</Text>
             </TouchableOpacity>
           </View>
         ) : (
@@ -149,13 +151,16 @@ const Profile = ({ navigation }: any) => {
         )}
 
         <TouchableOpacity
-          style={[styles.loginButton, loading && { backgroundColor: '#999' }]}
+          style={[
+            styles.loginButton,
+            { backgroundColor: loading ? theme.buttonDisabled : theme.button },
+          ]}
           onPress={handleLogout}
           disabled={loading}>
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.loginText}>Logout</Text>
+            <Text style={styles.loginOut}>Logout</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -171,50 +176,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f9fa',
   },
 
-  Avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 15,
-    borderColor: '#d3d3d3ff',
-    borderWidth: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-  },
-  AvatarText: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    color: '#ff0000ff',
-  },
   loginButton: {
     marginTop: 20,
-    backgroundColor: '#ff0000ff',
     paddingVertical: 6,
     paddingHorizontal: 20,
     borderRadius: 5,
     alignItems: 'center',
   },
-  loginText: {
+  loginOut: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '500',
   },
-  verifiedBadge: {
-    borderRadius: 20,
-    height: 20,
-    borderWidth: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  verifiedText: {
-    fontSize: 12,
-    marginHorizontal: 10,
-  },
   text: {
     fontSize: 14,
     color: '#333',
-    marginVertical: 2,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    alignSelf: 'center',
+    marginBottom: 10,
   },
 });
 

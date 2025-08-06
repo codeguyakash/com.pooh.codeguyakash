@@ -2,6 +2,8 @@ import { View, Animated, StyleSheet, Easing, Text } from 'react-native';
 import { useEffect, useRef } from 'react';
 import { useAppTheme } from '../context/ThemeContext';
 import logo from '../assets/icons/logo.png';
+import bg_logo from '../assets/icons/bg_logo.png';
+
 import { displayName as appName } from '../../app.json';
 
 const Splash = () => {
@@ -38,6 +40,7 @@ const Splash = () => {
           },
         ]}
       />
+
       <Text style={[{ color: theme.text }, styles.heading]}>
         {appName || 'Pooh'}
       </Text>
@@ -54,9 +57,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     marginBottom: 10,
+    borderRadius: 100,
   },
   heading: {
     fontSize: 24,

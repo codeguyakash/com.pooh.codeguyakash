@@ -125,7 +125,7 @@ const Login = () => {
             onPress={() => setIsShowPassword(!isShowPassword)}
             style={styles.toggleBtn}>
             <Text style={[styles.toggleText, { color: theme.text }]}>
-              {isShowPassword ? '🙈' : '👁️'}
+              {isShowPassword ? '🙈' : '🐵'}
             </Text>
           </TouchableOpacity>
         </View>

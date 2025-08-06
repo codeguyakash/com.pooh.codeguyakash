@@ -7,7 +7,7 @@ const lightTheme = {
   inputBg: '#fff',
   inputBorder: '#ddd',
   placeholder: '#999',
-  button: '#ff9100ff',
+  button: '#ff0000ff',
   buttonDisabled: '#999',
   subtitle: '#666',
 };
@@ -18,7 +18,7 @@ const darkTheme = {
   inputBg: '#23262F',
   inputBorder: '#333',
   placeholder: '#aaa',
-  button: '#ff9100ff',
+  button: '#ff0000ff',
   buttonDisabled: '#999',
   subtitle: '#aaa',
 };

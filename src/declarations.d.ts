@@ -11,3 +11,7 @@ declare module '*.jpeg' {
   const content: number;
   export default content;
 }
+declare module '*.svg' {
+  const content: number;
+  export default content;
+}

@@ -21,9 +21,9 @@ import { useNotification } from '../notification/useNotification';
 import { useSocket } from '../context/SocketContext';
 
 const Register = () => {
-  const [name, setName] = useState('Akash (Pixel)');
-  const [email, setEmail] = useState('pixel@codeguyakash.in');
-  const [password, setPassword] = useState('Password@#123');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [fcmToken, setFcmToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);

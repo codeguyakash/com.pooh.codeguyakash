@@ -18,31 +18,7 @@ const HomeScreen = () => {
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <View style={[styles.container, { backgroundColor: theme.background }]}>
         <Text style={[{ color: theme.text }, styles.heading]}>Home Screen</Text>
-        <ThreeDotMenu
-          iconColor="#FFF"
-          menuItems={[
-            {
-              label: 'Chat',
-              onPress: () => navigationRef.navigate('ChatScreen'),
-            },
-            {
-              label: 'Settings',
-              onPress: () => navigationRef.navigate('SettingsScreen'),
-            },
-            {
-              label: 'Home',
-              onPress: () => navigationRef.navigate('HomeScreen'),
-            },
-            {
-              label: 'Dashboard',
-              onPress: () => navigationRef.navigate('DashboardScreen'),
-            },
-            {
-              label: 'Profile',
-              onPress: () => navigationRef.navigate('ProfileScreen'),
-            },
-          ]}
-        />
+        <ThreeDotMenu iconColor="#FFF" />
       </View>
     </SafeAreaView>
   );

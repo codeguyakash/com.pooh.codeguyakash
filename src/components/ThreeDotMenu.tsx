@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ViewStyle,
 } from 'react-native';
+import { navigationRef } from '../navigation/navigationRef';
 
 interface MenuItem {
   label: string;
@@ -13,20 +14,37 @@ interface MenuItem {
 }
 
 interface Props {
-  menuItems: MenuItem[];
   iconColor?: string;
   menuStyle?: ViewStyle;
 }
 
-const ThreeDotMenu: React.FC<Props> = ({
-  menuItems,
-  iconColor = '#000',
-  menuStyle,
-}) => {
+const ThreeDotMenu: React.FC<Props> = ({ iconColor = '#000', menuStyle }) => {
   const [visible, setVisible] = useState(false);
 
   const toggleMenu = () => setVisible(!visible);
   const hideMenu = () => setVisible(false);
+  const menuItems: MenuItem[] = [
+    {
+      label: 'Chat',
+      onPress: () => navigationRef.navigate('ChatScreen'),
+    },
+    {
+      label: 'Settings',
+      onPress: () => navigationRef.navigate('SettingsScreen'),
+    },
+    {
+      label: 'Home',
+      onPress: () => navigationRef.navigate('HomeScreen'),
+    },
+    {
+      label: 'Dashboard',
+      onPress: () => navigationRef.navigate('DashboardScreen'),
+    },
+    {
+      label: 'Profile',
+      onPress: () => navigationRef.navigate('ProfileScreen'),
+    },
+  ];
 
   return (
     <View style={styles.wrapper}>

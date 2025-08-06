@@ -20,31 +20,7 @@ const SettingsScreen = () => {
         <Text style={[{ color: theme.text }, styles.heading]}>
           Settings Screen
         </Text>
-        <ThreeDotMenu
-          iconColor="#FFF"
-          menuItems={[
-            {
-              label: 'Chat',
-              onPress: () => navigationRef.navigate('ChatScreen'),
-            },
-            {
-              label: 'Settings',
-              onPress: () => navigationRef.navigate('SettingsScreen'),
-            },
-            {
-              label: 'Home',
-              onPress: () => navigationRef.navigate('HomeScreen'),
-            },
-            {
-              label: 'Dashboard',
-              onPress: () => navigationRef.navigate('DashboardScreen'),
-            },
-            {
-              label: 'Profile',
-              onPress: () => navigationRef.navigate('ProfileScreen'),
-            },
-          ]}
-        />
+        <ThreeDotMenu iconColor="#FFF" />
       </View>
     </SafeAreaView>
   );

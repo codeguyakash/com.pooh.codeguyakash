@@ -164,31 +164,7 @@ const ProfileScreen = ({ navigation }: any) => {
             <Text style={styles.loginOut}>Logout</Text>
           )}
         </TouchableOpacity>
-        <ThreeDotMenu
-          iconColor="#000"
-          menuItems={[
-            {
-              label: 'Chat',
-              onPress: () => navigationRef.navigate('ChatScreen'),
-            },
-            {
-              label: 'Settings',
-              onPress: () => navigationRef.navigate('SettingsScreen'),
-            },
-            {
-              label: 'Home',
-              onPress: () => navigationRef.navigate('HomeScreen'),
-            },
-            {
-              label: 'Dashboard',
-              onPress: () => navigationRef.navigate('DashboardScreen'),
-            },
-            {
-              label: 'Profile',
-              onPress: () => navigationRef.navigate('ProfileScreen'),
-            },
-          ]}
-        />
+        <ThreeDotMenu iconColor="#000" />
       </View>
     </View>
   );

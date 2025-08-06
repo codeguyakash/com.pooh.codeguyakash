@@ -7,7 +7,9 @@ import {
   ViewStyle,
 } from 'react-native';
 import { navigationRef } from '../navigation/navigationRef';
-
+import { useAuth } from '../context/AuthContext';
+import { logout } from '../api/modules/authApi';
+import { useToast } from '../context/ToastContext';
 interface MenuItem {
   label: string;
   onPress: () => void;
@@ -20,6 +22,9 @@ interface Props {
 
 const ThreeDotMenu: React.FC<Props> = ({ iconColor = '#000', menuStyle }) => {
   const [visible, setVisible] = useState(false);
+
+  const { logout: authLogout } = useAuth();
+  const { showToast } = useToast();
 
   const toggleMenu = () => setVisible(!visible);
   const hideMenu = () => setVisible(false);
@@ -43,6 +48,19 @@ const ThreeDotMenu: React.FC<Props> = ({ iconColor = '#000', menuStyle }) => {
     {
       label: 'Profile',
       onPress: () => navigationRef.navigate('ProfileScreen'),
+    },
+    {
+      label: 'Logout',
+      onPress: async () => {
+        try {
+          await logout();
+          authLogout();
+          showToast('Logout successful!');
+        } catch (error: any) {
+          console.error('Logout failed:', error.message);
+          showToast('Logout failed. Please try again.');
+        }
+      },
     },
   ];
 

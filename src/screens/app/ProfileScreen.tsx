@@ -1,11 +1,4 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-  Image,
-} from 'react-native';
+import { Text, View, StyleSheet, Image, SafeAreaView } from 'react-native';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { logout, getUserData } from '../../api/modules/authApi';
@@ -14,21 +7,20 @@ import { getDeviceInfo } from '../../utils/deviceInfo';
 
 import { useAuth } from '../../context/AuthContext';
 import { useSocket } from '../../context/SocketContext';
-import { navigate, navigationRef } from '../../navigation/navigationRef';
+import { navigationRef } from '../../navigation/navigationRef';
 
 import verified from '../../assets/icons/verified.png';
 import logo from '../../assets/icons/logo.png';
 import { useAppTheme } from '../../context/ThemeContext';
-import ThreeDotMenu from '../../components/ThreeDotMenu';
+import Header from '../../components/Header';
 
 const ProfileScreen = ({ navigation }: any) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   const [device, setDevice] = useState<any>(null);
-  const { logout: authLogout } = useAuth();
   const { socket, sendMessage } = useSocket();
-  const { showToast } = useToast();
+
   const theme = useAppTheme();
 
   useEffect(() => {
@@ -52,10 +44,8 @@ const ProfileScreen = ({ navigation }: any) => {
   async function userData() {
     setLoading(true);
     let userId = String(await AsyncStorage.getItem('userId'));
-
     try {
       let response = await getUserData(userId);
-
       const { user } = response.data;
       if (response.success && response.data) {
         setUser(user);
@@ -67,36 +57,11 @@ const ProfileScreen = ({ navigation }: any) => {
       setLoading(false);
     }
   }
-  const handleLogout = async () => {
-    setLoading(true);
-
-    try {
-      await logout();
-      authLogout();
-      setUser(null);
-      showToast('Logout successful!');
-    } catch (error: any) {
-      console.error('Logout failed:', error.message);
-      showToast('Logout failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoToChat = () => {
-    console.log('CLICKED CHAT');
-    navigate('ChatScreen');
-    if (socket && socket.connected) {
-      console.log('✅ Socket is connected, navigating to Chat');
-      navigate('ChatScreen');
-    } else {
-      showToast('Socket not connected. Please wait...');
-    }
-  };
 
   return (
-    <View style={styles.container}>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
+        <Header title="Profile Screen" />
         {user ? (
           <View style={{ alignItems: 'center', marginTop: 10 }}>
             <Image source={logo} style={styles.logo} />
@@ -110,7 +75,7 @@ const ProfileScreen = ({ navigation }: any) => {
                 style={{
                   fontSize: 20,
                   fontWeight: 'bold',
-                  color: 'black',
+                  color: theme.text,
                   marginRight: 5,
                 }}>
                 {user.name}
@@ -130,54 +95,27 @@ const ProfileScreen = ({ navigation }: any) => {
               </View>
             </View>
 
-            <Text> {user.email}</Text>
-            <Text> {user.uuid}</Text>
-            <Text>Current Device Info</Text>
-            <View>
-              {Object.entries(device).map(([key, value]) => (
-                <Text style={styles.text} key={key}>
-                  {key.replace(/_/g, ' ')?.toUpperCase()}
-                  :-------------------- {String(value)}
-                </Text>
-              ))}
-            </View>
-            <TouchableOpacity
-              style={[styles.loginButton, { backgroundColor: '#53A04A' }]}
-              onPress={handleGoToChat}>
-              <Text style={styles.loginOut}>CHAT</Text>
-            </TouchableOpacity>
+            <Text style={{ color: theme.text }}> {user.email}</Text>
+            <Text style={{ color: theme.text }}> {user.uuid}</Text>
+            <Text style={{ color: theme.text }}>Current Device Info</Text>
           </View>
         ) : (
           <Text style={{ marginTop: 20 }}>No user data available</Text>
         )}
-
-        <TouchableOpacity
-          style={[
-            styles.loginButton,
-            { backgroundColor: loading ? theme.buttonDisabled : theme.button },
-          ]}
-          onPress={handleLogout}
-          disabled={loading}>
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.loginOut}>Logout</Text>
-          )}
-        </TouchableOpacity>
-        <ThreeDotMenu iconColor="#000" />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 export default ProfileScreen;
 
 const styles = StyleSheet.create({
-  container: {
+  safe: {
     flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 25,
-    backgroundColor: '#f8f9fa',
+  },
+  container: {
+    marginTop: 10,
+    paddingHorizontal: 20,
   },
 
   loginButton: {

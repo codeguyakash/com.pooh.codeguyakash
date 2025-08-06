@@ -11,6 +11,7 @@ import { navigationRef } from '../../navigation/navigationRef';
 import { useSocket } from '../../context/SocketContext';
 import { useAppTheme } from '../../context/ThemeContext';
 import ThreeDotMenu from '../../components/ThreeDotMenu';
+import Header from '../../components/Header';
 
 const ChatScreen = () => {
   const { sendMessage, lastMessage } = useSocket();
@@ -39,9 +40,7 @@ const ChatScreen = () => {
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <Text style={[{ color: theme.text }, styles.heading]}>
-          Dashboard Screen
-        </Text>
+        <Header title="Chat Screen" />
         <TextInput
           placeholder="Type a message"
           value={message}
@@ -58,7 +57,6 @@ const ChatScreen = () => {
             <Text>Last Message: {lastMessage.text}</Text>
           </View>
         )}
-        <ThreeDotMenu iconColor="#FFF" />
       </View>
     </SafeAreaView>
   );
@@ -71,8 +69,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    flex: 1,
-    justifyContent: 'center',
+    marginTop: 10,
     paddingHorizontal: 20,
   },
   heading: {

@@ -1,9 +1,9 @@
-import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useEffect } from 'react';
 import { navigationRef } from '../../navigation/navigationRef';
 import { useSocket } from '../../context/SocketContext';
 import { useAppTheme } from '../../context/ThemeContext';
-import ThreeDotMenu from '../../components/ThreeDotMenu';
+import Header from '../../components/Header';
 
 const HomeScreen = () => {
   const { sendMessage } = useSocket();
@@ -17,8 +17,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <Text style={[{ color: theme.text }, styles.heading]}>Home Screen</Text>
-        <ThreeDotMenu iconColor="#FFF" />
+        <Header title="Home Screen" />
       </View>
     </SafeAreaView>
   );
@@ -31,8 +30,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    flex: 1,
-    justifyContent: 'center',
+    marginTop: 10,
     paddingHorizontal: 20,
   },
   heading: {

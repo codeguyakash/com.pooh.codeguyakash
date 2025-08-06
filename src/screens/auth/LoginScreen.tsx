@@ -8,30 +8,27 @@ import {
   Image,
   SafeAreaView,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../../assets/icons/logo.png';
-import { RegisterRequest } from '../../types/apiTypes';
-import { register } from '../../api/modules/authApi';
+import { LoginRequest } from '../../types/apiTypes';
+import { login } from '../../api/modules/authApi';
 import { useAppTheme } from '../../context/ThemeContext';
 import { useToast } from '../../context/ToastContext';
-import { useAuth } from '../../context/AuthContext';
 import { navigate, navigationRef } from '../../navigation/navigationRef';
-import { useNotification } from '../../notification/useNotification';
+import { useAuth } from '../../context/AuthContext';
 import { useSocket } from '../../context/SocketContext';
 
-const Register = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [fcmToken, setFcmToken] = useState('');
+const LoginScreen = () => {
+  const [email, setEmail] = useState('pixel@codeguyakash.in');
+  const [password, setPassword] = useState('Password@#123');
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
 
   const theme = useAppTheme();
   const { showToast } = useToast();
   const { sendMessage } = useSocket();
-  const { register: authRegister } = useAuth();
+  const { login: authLogin } = useAuth();
 
   useEffect(() => {
     sendMessage({
@@ -39,45 +36,30 @@ const Register = () => {
     });
   }, []);
 
-  useNotification((token) => {
-    setFcmToken(token);
-  });
-
-  const handleSignup = async (
+  const handleLogin = async (
     email: string,
     password: string,
-    name: string,
-    fcmToken: string,
     setLoading: (v: boolean) => void
   ) => {
     setLoading(true);
-    const payload: RegisterRequest = {
-      name,
-      email,
-      password,
-      fcm_token: fcmToken,
-    };
+    const payload: LoginRequest = { email, password };
 
     try {
-      const response = await register(payload);
-      console.log('Response from register:', response);
+      const response = await login(payload);
+
       if (response.success && response.data) {
         const { accessToken, refreshToken, user } = response.data;
 
-        console.log(accessToken, refreshToken, user);
-
-        await authRegister(accessToken, refreshToken);
+        authLogin(accessToken, refreshToken);
         await AsyncStorage.setItem('userId', Number(user.id).toString());
-        const message = response.message || 'Registration successful';
+
+        const message = response.message || 'Login successful';
         showToast(message);
       } else {
-        console.error('Registration failed:', response);
-        const errorMsg = response.message || 'Registration failed';
+        const errorMsg = response.message || 'Login failed';
         showToast(errorMsg);
       }
     } catch (error: any) {
-      console.log('Signup error:', error);
-
       if (
         error.response &&
         error.response.data &&
@@ -102,25 +84,8 @@ const Register = () => {
       <View style={[styles.container, { backgroundColor: theme.background }]}>
         <Image source={logo} style={styles.logo} />
         <Text style={[styles.subtitle, { color: theme.subtitle }]}>
-          Create your account
+          Login to your account
         </Text>
-
-        <TextInput
-          style={[
-            styles.input,
-            {
-              backgroundColor: theme.inputBg,
-              borderColor: theme.inputBorder,
-              color: theme.text,
-            },
-          ]}
-          placeholder="Name"
-          value={name}
-          autoCapitalize="none"
-          onChangeText={setName}
-          placeholderTextColor={theme.placeholder}
-        />
-
         <TextInput
           style={[
             styles.input,
@@ -170,23 +135,22 @@ const Register = () => {
             styles.loginButton,
             { backgroundColor: loading ? theme.buttonDisabled : theme.button },
           ]}
-          onPress={() =>
-            handleSignup(email, password, name, fcmToken, setLoading)
-          }
-          disabled={loading}>
+          onPress={() => handleLogin(email, password, setLoading)}
+          disabled={loading}
+          activeOpacity={0.8}>
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.loginText}>Register</Text>
+            <Text style={styles.loginText}>Login</Text>
           )}
         </TouchableOpacity>
 
         <Text style={{ textAlign: 'center', marginTop: 20, color: theme.text }}>
-          Already have an account?{' '}
+          Don't have an account?{' '}
           <Text
             style={{ color: theme.button, fontWeight: 'bold' }}
-            onPress={() => navigate('Login')}>
-            Login
+            onPress={() => navigate('RegisterScreen')}>
+            Register
           </Text>
         </Text>
       </View>
@@ -194,7 +158,7 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   safe: {
@@ -203,7 +167,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 25,
+    paddingHorizontal: 20,
   },
   subtitle: {
     fontSize: 16,
@@ -211,7 +175,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   input: {
-    height: 50,
+    height: 48,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 15,
@@ -243,10 +207,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 90,
+    height: 90,
     alignSelf: 'center',
     marginBottom: 20,
-    borderRadius: 50,
+    borderRadius: 45,
   },
 });

@@ -22,6 +22,11 @@ const darkTheme = {
   buttonDisabled: '#999',
   subtitle: '#aaa',
 };
+const card = {
+  background: '#fff',
+  border: '#ddd',
+  shadow: '#000',
+};
 
 const ThemeContext = createContext(lightTheme);
 

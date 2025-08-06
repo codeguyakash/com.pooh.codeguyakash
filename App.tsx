@@ -6,13 +6,16 @@ import { navigationRef } from './src/navigation/navigationRef';
 
 import messaging from '@react-native-firebase/messaging';
 
-import Register from './src/screens/auth/Register';
-import Login from './src/screens/auth/Login';
+import RegisterScreen from './src/screens/auth/RegisterScreen';
+import LoginScreen from './src/screens/auth/LoginScreen';
+import ForgotScreen from './src/screens/auth/ForgotScreen';
 
 import ChatScreen from './src/screens/app/ChatScreen';
-import Profile from './src/screens/app/Profile';
-import Home from './src/screens/app/Home';
-import Splash from './src/screens/Splash';
+import ProfileScreen from './src/screens/app/ProfileScreen';
+import HomeScreen from './src/screens/app/HomeScreen';
+import SplashScreen from './src/screens/SplashScreen';
+import DashboardScreen from './src/screens/app/DashboardScreen';
+import SettingsScreen from './src/screens/app/SettingsScreen';
 
 import { useNotification } from './src/notification/useNotification';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
@@ -50,20 +53,23 @@ function AppNavigation(): React.JSX.Element {
     return unsubscribe;
   }, []);
 
-  if (loading) return <Splash />;
+  if (loading) return <SplashScreen />;
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {isAuthenticated ? (
         <>
-          <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="Chat" component={ChatScreen} />
-          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+          <Stack.Screen name="ChatScreen" component={ChatScreen} />
+          <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
+          <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
         </>
       ) : (
         <>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+          <Stack.Screen name="ForgotScreen" component={ForgotScreen} />
         </>
       )}
     </Stack.Navigator>

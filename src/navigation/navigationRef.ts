@@ -1,11 +1,14 @@
 import { createNavigationContainerRef } from '@react-navigation/native';
 
 export type RootStackParamList = {
-  Login: undefined;
-  Register: undefined;
-  Profile: undefined;
-  Home: undefined;
-  Chat: undefined;
+  LoginScreen: undefined;
+  RegisterScreen: undefined;
+  ProfileScreen: undefined;
+  HomeScreen: undefined;
+  ChatScreen: undefined;
+  SettingsScreen: undefined;
+  DashboardScreen: undefined;
+  ForgotScreen: undefined;
 };
 
 // Properly typed navigation reference

@@ -19,8 +19,9 @@ import { navigate, navigationRef } from '../../navigation/navigationRef';
 import verified from '../../assets/icons/verified.png';
 import logo from '../../assets/icons/logo.png';
 import { useAppTheme } from '../../context/ThemeContext';
+import ThreeDotMenu from '../../components/ThreeDotMenu';
 
-const Profile = ({ navigation }: any) => {
+const ProfileScreen = ({ navigation }: any) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
@@ -84,10 +85,10 @@ const Profile = ({ navigation }: any) => {
 
   const handleGoToChat = () => {
     console.log('CLICKED CHAT');
-    navigate('Chat');
+    navigate('ChatScreen');
     if (socket && socket.connected) {
       console.log('✅ Socket is connected, navigating to Chat');
-      navigate('Chat');
+      navigate('ChatScreen');
     } else {
       showToast('Socket not connected. Please wait...');
     }
@@ -163,10 +164,37 @@ const Profile = ({ navigation }: any) => {
             <Text style={styles.loginOut}>Logout</Text>
           )}
         </TouchableOpacity>
+        <ThreeDotMenu
+          iconColor="#000"
+          menuItems={[
+            {
+              label: 'Chat',
+              onPress: () => navigationRef.navigate('ChatScreen'),
+            },
+            {
+              label: 'Settings',
+              onPress: () => navigationRef.navigate('SettingsScreen'),
+            },
+            {
+              label: 'Home',
+              onPress: () => navigationRef.navigate('HomeScreen'),
+            },
+            {
+              label: 'Dashboard',
+              onPress: () => navigationRef.navigate('DashboardScreen'),
+            },
+            {
+              label: 'Profile',
+              onPress: () => navigationRef.navigate('ProfileScreen'),
+            },
+          ]}
+        />
       </View>
     </View>
   );
 };
+
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -199,5 +227,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-export default Profile;

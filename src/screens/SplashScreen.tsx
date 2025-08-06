@@ -2,11 +2,10 @@ import { View, Animated, StyleSheet, Easing, Text } from 'react-native';
 import { useEffect, useRef } from 'react';
 import { useAppTheme } from '../context/ThemeContext';
 import logo from '../assets/icons/logo.png';
-import bg_logo from '../assets/icons/bg_logo.png';
 
 import { displayName as appName } from '../../app.json';
 
-const Splash = () => {
+const SplashScreen = () => {
   const theme = useAppTheme();
   const bounceValue = useRef(new Animated.Value(0)).current;
 
@@ -48,7 +47,7 @@ const Splash = () => {
   );
 };
 
-export default Splash;
+export default SplashScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -8,27 +8,30 @@ import {
   Image,
   SafeAreaView,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../../assets/icons/logo.png';
-import { LoginRequest } from '../../types/apiTypes';
-import { login } from '../../api/modules/authApi';
+import { RegisterRequest } from '../../types/apiTypes';
+import { register } from '../../api/modules/authApi';
 import { useAppTheme } from '../../context/ThemeContext';
 import { useToast } from '../../context/ToastContext';
-import { navigate, navigationRef } from '../../navigation/navigationRef';
 import { useAuth } from '../../context/AuthContext';
+import { navigate, navigationRef } from '../../navigation/navigationRef';
+import { useNotification } from '../../notification/useNotification';
 import { useSocket } from '../../context/SocketContext';
 
-const Login = () => {
-  const [email, setEmail] = useState('pixel@codeguyakash.in');
-  const [password, setPassword] = useState('Password@#123');
+const RegisterScreen = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fcmToken, setFcmToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
 
   const theme = useAppTheme();
   const { showToast } = useToast();
   const { sendMessage } = useSocket();
-  const { login: authLogin } = useAuth();
+  const { register: authRegister } = useAuth();
 
   useEffect(() => {
     sendMessage({
@@ -36,30 +39,45 @@ const Login = () => {
     });
   }, []);
 
-  const handleLogin = async (
+  useNotification((token) => {
+    setFcmToken(token);
+  });
+
+  const handleSignup = async (
     email: string,
     password: string,
+    name: string,
+    fcmToken: string,
     setLoading: (v: boolean) => void
   ) => {
     setLoading(true);
-    const payload: LoginRequest = { email, password };
+    const payload: RegisterRequest = {
+      name,
+      email,
+      password,
+      fcm_token: fcmToken,
+    };
 
     try {
-      const response = await login(payload);
-
+      const response = await register(payload);
+      console.log('Response from register:', response);
       if (response.success && response.data) {
         const { accessToken, refreshToken, user } = response.data;
 
-        authLogin(accessToken, refreshToken);
-        await AsyncStorage.setItem('userId', Number(user.id).toString());
+        console.log(accessToken, refreshToken, user);
 
-        const message = response.message || 'Login successful';
+        await authRegister(accessToken, refreshToken);
+        await AsyncStorage.setItem('userId', Number(user.id).toString());
+        const message = response.message || 'Registration successful';
         showToast(message);
       } else {
-        const errorMsg = response.message || 'Login failed';
+        console.error('Registration failed:', response);
+        const errorMsg = response.message || 'Registration failed';
         showToast(errorMsg);
       }
     } catch (error: any) {
+      console.log('Signup error:', error);
+
       if (
         error.response &&
         error.response.data &&
@@ -84,8 +102,25 @@ const Login = () => {
       <View style={[styles.container, { backgroundColor: theme.background }]}>
         <Image source={logo} style={styles.logo} />
         <Text style={[styles.subtitle, { color: theme.subtitle }]}>
-          Login to your account
+          Create your account
         </Text>
+
+        <TextInput
+          style={[
+            styles.input,
+            {
+              backgroundColor: theme.inputBg,
+              borderColor: theme.inputBorder,
+              color: theme.text,
+            },
+          ]}
+          placeholder="Name"
+          value={name}
+          autoCapitalize="none"
+          onChangeText={setName}
+          placeholderTextColor={theme.placeholder}
+        />
+
         <TextInput
           style={[
             styles.input,
@@ -135,22 +170,23 @@ const Login = () => {
             styles.loginButton,
             { backgroundColor: loading ? theme.buttonDisabled : theme.button },
           ]}
-          onPress={() => handleLogin(email, password, setLoading)}
-          disabled={loading}
-          activeOpacity={0.8}>
+          onPress={() =>
+            handleSignup(email, password, name, fcmToken, setLoading)
+          }
+          disabled={loading}>
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.loginText}>Login</Text>
+            <Text style={styles.loginText}>Register</Text>
           )}
         </TouchableOpacity>
 
         <Text style={{ textAlign: 'center', marginTop: 20, color: theme.text }}>
-          Don't have an account?{' '}
+          Already have an account?{' '}
           <Text
             style={{ color: theme.button, fontWeight: 'bold' }}
-            onPress={() => navigate('Register')}>
-            Register
+            onPress={() => navigate('LoginScreen')}>
+            Login
           </Text>
         </Text>
       </View>
@@ -158,7 +194,7 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default RegisterScreen;
 
 const styles = StyleSheet.create({
   safe: {
@@ -167,7 +203,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 25,
   },
   subtitle: {
     fontSize: 16,
@@ -175,7 +211,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   input: {
-    height: 48,
+    height: 50,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 15,
@@ -207,10 +243,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   logo: {
-    width: 90,
-    height: 90,
+    width: 100,
+    height: 100,
     alignSelf: 'center',
     marginBottom: 20,
-    borderRadius: 45,
+    borderRadius: 50,
   },
 });

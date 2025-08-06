@@ -10,6 +10,7 @@ import { navigationRef } from '../navigation/navigationRef';
 import { useAuth } from '../context/AuthContext';
 import { logout } from '../api/modules/authApi';
 import { useToast } from '../context/ToastContext';
+import { useAppTheme } from '../context/ThemeContext';
 interface MenuItem {
   label: string;
   onPress: () => void;
@@ -22,6 +23,7 @@ interface Props {
 
 const ThreeDotMenu: React.FC<Props> = ({ iconColor = '#000', menuStyle }) => {
   const [visible, setVisible] = useState(false);
+  const theme = useAppTheme();
 
   const { logout: authLogout } = useAuth();
   const { showToast } = useToast();
@@ -33,10 +35,7 @@ const ThreeDotMenu: React.FC<Props> = ({ iconColor = '#000', menuStyle }) => {
       label: 'Chat',
       onPress: () => navigationRef.navigate('ChatScreen'),
     },
-    {
-      label: 'Settings',
-      onPress: () => navigationRef.navigate('SettingsScreen'),
-    },
+
     {
       label: 'Home',
       onPress: () => navigationRef.navigate('HomeScreen'),
@@ -48,6 +47,10 @@ const ThreeDotMenu: React.FC<Props> = ({ iconColor = '#000', menuStyle }) => {
     {
       label: 'Profile',
       onPress: () => navigationRef.navigate('ProfileScreen'),
+    },
+    {
+      label: 'Settings',
+      onPress: () => navigationRef.navigate('SettingsScreen'),
     },
     {
       label: 'Logout',
@@ -79,7 +82,9 @@ const ThreeDotMenu: React.FC<Props> = ({ iconColor = '#000', menuStyle }) => {
                 item.onPress();
                 hideMenu();
               }}>
-              <Text style={styles.menuItem}>{item.label}</Text>
+              <Text style={[styles.menuItem, { color: theme.text }]}>
+                {item.label}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -102,18 +107,17 @@ const styles = StyleSheet.create({
   },
   menuBox: {
     position: 'absolute',
-    top: 30,
-    right: 0,
-    backgroundColor: '#fff',
-    borderRadius: 6,
-    elevation: 5,
+    top: 50,
+    right: -10,
+    backgroundColor: '#20232cff',
+    borderRadius: 3,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     zIndex: 99,
     paddingVertical: 6,
-    minWidth: 120,
+    minWidth: 150,
   },
   menuItem: {
     paddingVertical: 10,

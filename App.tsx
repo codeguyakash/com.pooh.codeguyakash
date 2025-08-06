@@ -6,12 +6,13 @@ import { navigationRef } from './src/navigation/navigationRef';
 
 import messaging from '@react-native-firebase/messaging';
 
-import ChatScreen from './src/screens/ChatScreen';
-import Register from './src/screens/Register';
-import Profile from './src/screens/Profile';
+import Register from './src/screens/auth/Register';
+import Login from './src/screens/auth/Login';
+
+import ChatScreen from './src/screens/app/ChatScreen';
+import Profile from './src/screens/app/Profile';
+import Home from './src/screens/app/Home';
 import Splash from './src/screens/Splash';
-import Login from './src/screens/Login';
-import Home from './src/screens/Home';
 
 import { useNotification } from './src/notification/useNotification';
 import { AuthProvider, useAuth } from './src/context/AuthContext';

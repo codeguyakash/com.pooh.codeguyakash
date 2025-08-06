@@ -10,14 +10,14 @@ import {
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import logo from '../assets/icons/logo.png';
-import { LoginRequest } from '../types/apiTypes';
-import { login } from '../api/modules/authApi';
-import { useAppTheme } from '../context/ThemeContext';
-import { useToast } from '../context/ToastContext';
-import { navigate, navigationRef } from '../navigation/navigationRef';
-import { useAuth } from '../context/AuthContext';
-import { useSocket } from '../context/SocketContext';
+import logo from '../../assets/icons/logo.png';
+import { LoginRequest } from '../../types/apiTypes';
+import { login } from '../../api/modules/authApi';
+import { useAppTheme } from '../../context/ThemeContext';
+import { useToast } from '../../context/ToastContext';
+import { navigate, navigationRef } from '../../navigation/navigationRef';
+import { useAuth } from '../../context/AuthContext';
+import { useSocket } from '../../context/SocketContext';
 
 const Login = () => {
   const [email, setEmail] = useState('pixel@codeguyakash.in');

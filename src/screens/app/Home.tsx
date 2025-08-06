@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect } from 'react';
-import { navigate, navigationRef } from '../navigation/navigationRef';
-import { useSocket } from '../context/SocketContext';
+import { navigate, navigationRef } from '../../navigation/navigationRef';
+import { useSocket } from '../../context/SocketContext';
 
 const Home = () => {
   const { sendMessage } = useSocket();

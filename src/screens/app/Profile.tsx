@@ -7,13 +7,13 @@ import {
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { logout, getUserData } from '../api/modules/authApi';
-import { useToast } from '../context/ToastContext';
-import { getDeviceInfo } from '../utils/deviceInfo';
+import { logout, getUserData } from '../../api/modules/authApi';
+import { useToast } from '../../context/ToastContext';
+import { getDeviceInfo } from '../../utils/deviceInfo';
 
-import { useAuth } from '../context/AuthContext';
-import { useSocket } from '../context/SocketContext';
-import { navigate, navigationRef } from '../navigation/navigationRef';
+import { useAuth } from '../../context/AuthContext';
+import { useSocket } from '../../context/SocketContext';
+import { navigate, navigationRef } from '../../navigation/navigationRef';
 
 const Profile = ({ navigation }: any) => {
   const [user, setUser] = useState<any>(null);

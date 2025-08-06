@@ -10,15 +10,15 @@ import {
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import logo from '../assets/icons/logo.png';
-import { RegisterRequest } from '../types/apiTypes';
-import { register } from '../api/modules/authApi';
-import { useAppTheme } from '../context/ThemeContext';
-import { useToast } from '../context/ToastContext';
-import { useAuth } from '../context/AuthContext';
-import { navigate, navigationRef } from '../navigation/navigationRef';
-import { useNotification } from '../notification/useNotification';
-import { useSocket } from '../context/SocketContext';
+import logo from '../../assets/icons/logo.png';
+import { RegisterRequest } from '../../types/apiTypes';
+import { register } from '../../api/modules/authApi';
+import { useAppTheme } from '../../context/ThemeContext';
+import { useToast } from '../../context/ToastContext';
+import { useAuth } from '../../context/AuthContext';
+import { navigate, navigationRef } from '../../navigation/navigationRef';
+import { useNotification } from '../../notification/useNotification';
+import { useSocket } from '../../context/SocketContext';
 
 const Register = () => {
   const [name, setName] = useState('');

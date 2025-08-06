@@ -36,7 +36,7 @@ export const verifyAccessToken = async (
   // console.log('Verifying access token:', accessToken);
   try {
     const response = await postMethod<LoginResponse>(
-      '/auth/verify',
+      '/auth/verify-token',
       {},
       {
         headers: {

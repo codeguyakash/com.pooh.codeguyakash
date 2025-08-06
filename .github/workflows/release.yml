@@ -20,7 +20,15 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
-      - name: 🔑 Give Gradle permission
+      - name: 📦 Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 📦 Install npm dependencies
+        run: npm install
+
+      - name: 🔑 Make Gradle executable
         run: chmod +x ./android/gradlew
 
       - name: 🏗️ Build APK

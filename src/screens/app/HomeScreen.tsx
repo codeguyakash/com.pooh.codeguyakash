@@ -51,7 +51,7 @@ const HomeScreen = () => {
         <Pressable onPress={() => setIsModalVisible(false)}>
           <Text
             style={{ color: theme.button, textAlign: 'center', marginTop: 20 }}>
-            X
+            close
           </Text>
         </Pressable>
         <View>

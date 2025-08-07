@@ -26,6 +26,6 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
   },
 });

@@ -10,6 +10,7 @@ const lightTheme = {
   button: '#ff0000ff',
   buttonDisabled: '#999',
   subtitle: '#666',
+  customColor: '#007bff',
 };
 
 const darkTheme = {
@@ -21,6 +22,7 @@ const darkTheme = {
   button: '#ff0000ff',
   buttonDisabled: '#999',
   subtitle: '#aaa',
+  customColor: '#007bff',
 };
 const card = {
   background: '#fff',

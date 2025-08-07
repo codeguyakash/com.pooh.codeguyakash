@@ -54,7 +54,10 @@ const ProfileScreen = ({ navigation }: any) => {
         {user ? (
           <>
             <View style={styles.profileSection}>
-              <Image source={logo} style={styles.avatar} />
+              <Image
+                source={{ uri: user.avatar_url || logo }}
+                style={styles.avatar}
+              />
               <TouchableOpacity>
                 <Text style={styles.editText}>Edit</Text>
               </TouchableOpacity>
@@ -139,15 +142,14 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: '#000',
   },
   container: {
     flex: 1,
-    padding: 20,
   },
   profileSection: {
     alignItems: 'center',
     marginTop: 40,
+    paddingHorizontal: 20,
   },
   avatar: {
     width: 120,

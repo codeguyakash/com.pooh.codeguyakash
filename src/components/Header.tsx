@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, StatusBar } from 'react-native';
 import React from 'react';
 import { useAppTheme } from '../context/ThemeContext';
 import ThreeDotMenu from './ThreeDotMenu';
@@ -8,6 +8,10 @@ const Header = ({ title = 'Screen' }: { title?: string }) => {
 
   return (
     <View style={[styles.container]}>
+      <StatusBar
+        backgroundColor={theme.customColor}
+        barStyle={theme.text === '#fff' ? 'light-content' : 'dark-content'}
+      />
       <Text style={[styles.heading, { color: theme.text }]}>{title}</Text>
       <ThreeDotMenu iconColor={theme.text} />
     </View>
@@ -21,6 +25,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   heading: {
     fontSize: 24,

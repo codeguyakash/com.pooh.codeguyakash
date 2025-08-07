@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import React, { useEffect } from 'react';
 import { navigationRef } from '../../navigation/navigationRef';
 import { useSocket } from '../../context/SocketContext';
@@ -16,9 +16,7 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
-      <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <Header title="Home Screen" />
-      </View>
+      <Header title="Home Screen" />
     </SafeAreaView>
   );
 };
@@ -28,13 +26,6 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-  },
-  container: {
-    marginTop: 10,
     paddingHorizontal: 20,
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: 'bold',
   },
 });

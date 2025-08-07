@@ -81,3 +81,10 @@ dummy.txt
 
 android/app/google-services.json
 google-services.json
+
+
+
+
+
+
+.github/workflows/release.yml

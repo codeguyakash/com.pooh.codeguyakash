@@ -21,3 +21,5 @@ https://raw.githubusercontent.com/codeguyakash/pooh.codeguyakash/main/android/ap
 
 git commit --allow-empty -m "trigger workflow again"
 git push origin main
+
+./gradlew assembleRelease

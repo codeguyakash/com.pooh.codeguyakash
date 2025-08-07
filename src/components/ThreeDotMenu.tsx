@@ -103,7 +103,8 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   dotsIcon: {
-    fontSize: 22,
+    fontSize: 24,
+    fontWeight: '500',
   },
   menuBox: {
     position: 'absolute',

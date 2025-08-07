@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import { useColorScheme } from 'react-native';
+import { fonts } from '../utils/typography';
 
 const lightTheme = {
   background: '#f8f9fa',
@@ -11,6 +12,7 @@ const lightTheme = {
   buttonDisabled: '#999',
   subtitle: '#666',
   customColor: '#007bff',
+  fontFamily: fonts.regular,
 };
 
 const darkTheme = {
@@ -23,6 +25,7 @@ const darkTheme = {
   buttonDisabled: '#999',
   subtitle: '#aaa',
   customColor: '#007bff',
+  fontFamily: fonts.regular,
 };
 const card = {
   background: '#fff',

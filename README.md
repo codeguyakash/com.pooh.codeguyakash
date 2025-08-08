@@ -24,5 +24,6 @@ git push origin main
 
 ./gradlew assembleRelease
 
-
+git add .
 git commit -m "PROD BUILD"
+git push

@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { navigationRef } from '../../navigation/navigationRef';
 import { useSocket } from '../../context/SocketContext';
 import { useAppTheme } from '../../context/ThemeContext';
-import ThreeDotMenu from '../../components/ThreeDotMenu';
 import Header from '../../components/Header';
 
 const DashboardScreen = () => {

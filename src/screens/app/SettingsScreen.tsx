@@ -1,9 +1,8 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useEffect } from 'react';
 import { navigationRef } from '../../navigation/navigationRef';
 import { useSocket } from '../../context/SocketContext';
 import { useAppTheme } from '../../context/ThemeContext';
-import ThreeDotMenu from '../../components/ThreeDotMenu';
 import Header from '../../components/Header';
 
 const SettingsScreen = () => {

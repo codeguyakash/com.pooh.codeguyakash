@@ -45,24 +45,32 @@ const HomeScreen = () => {
       <Modal
         visible={isModalVisible}
         animationType="slide"
-        presentationStyle="formSheet"
-        onRequestClose={() => setIsModalVisible(false)}
-        transparent={false}>
-        <Pressable onPress={() => setIsModalVisible(false)}>
-          <Text
-            style={{ color: theme.button, textAlign: 'center', marginTop: 20 }}>
-            close
-          </Text>
-        </Pressable>
-        <View>
-          <Text
-            style={{
-              color: theme.background,
-              textAlign: 'center',
-              marginTop: 20,
-            }}>
-            This is a Modal!
-          </Text>
+        transparent={true}
+        onRequestClose={() => setIsModalVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Pressable onPress={() => setIsModalVisible(false)}>
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  marginTop: 20,
+                }}>
+                Close
+              </Text>
+            </Pressable>
+            <View>
+              <Text
+                style={{
+                  color: theme.text,
+                  textAlign: 'center',
+                  marginTop: 20,
+                }}>
+                This is a Modal!
+              </Text>
+            </View>
+          </View>
         </View>
       </Modal>
     </SafeAreaView>
@@ -74,6 +82,24 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    // paddingHorizontal: 20,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    position: 'absolute',
+    bottom: 0,
+    height: '80%',
+    width: '100%',
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    padding: 20,
+    overflow: 'hidden',
   },
 });

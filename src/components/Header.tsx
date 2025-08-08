@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, Platform } from 'react-native';
 import React from 'react';
 import { useAppTheme } from '../context/ThemeContext';
 import ThreeDotMenu from './ThreeDotMenu';
@@ -7,10 +7,10 @@ const Header = ({ title = 'Screen' }: { title?: string }) => {
   const theme = useAppTheme();
 
   return (
-    <View style={[styles.container]}>
+    <SafeAreaView style={[styles.container]}>
       <Text style={[styles.heading, { color: theme.text }]}>{title}</Text>
       <ThreeDotMenu iconColor={theme.text} />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingTop: Platform.OS === 'android' ? 25 : 0,
   },
   heading: {
     fontSize: 24,

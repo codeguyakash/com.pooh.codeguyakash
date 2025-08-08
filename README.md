@@ -23,3 +23,6 @@ git commit --allow-empty -m "trigger workflow again"
 git push origin main
 
 ./gradlew assembleRelease
+
+
+git commit -m "PROD BUILD"

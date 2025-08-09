@@ -1,0 +1,112 @@
+[
+    {
+        "type": "Fruit",
+        "data": [
+            "Apple",
+            "Banana",
+            "Cherry",
+            "Mango",
+            "Pineapple",
+            "Grapes"
+        ]
+    },
+    {
+        "type": "Vegetable",
+        "data": [
+            "Carrot",
+            "Broccoli",
+            "Spinach",
+            "Potato",
+            "Onion",
+            "Tomato"
+        ]
+    },
+    {
+        "type": "Beverage",
+        "data": [
+            "Water",
+            "Coffee",
+            "Tea",
+            "Juice",
+            "Milkshake",
+            "Soda"
+        ]
+    },
+    {
+        "type": "Snack",
+        "data": [
+            "Chips",
+            "Cookies",
+            "Popcorn",
+            "Pretzels",
+            "Nachos",
+            "Granola Bar"
+        ]
+    },
+    {
+        "type": "Dessert",
+        "data": [
+            "Cake",
+            "Ice Cream",
+            "Brownie",
+            "Donut",
+            "Pudding",
+            "Cupcake"
+        ]
+    },
+    {
+        "type": "Meat",
+        "data": [
+            "Chicken",
+            "Beef",
+            "Pork",
+            "Lamb",
+            "Turkey",
+            "Fish"
+        ]
+    },
+    {
+        "type": "Seafood",
+        "data": [
+            "Shrimp",
+            "Crab",
+            "Lobster",
+            "Oyster",
+            "Salmon",
+            "Tuna"
+        ]
+    },
+    {
+        "type": "Dairy",
+        "data": [
+            "Milk",
+            "Cheese",
+            "Yogurt",
+            "Butter",
+            "Cream",
+            "Ghee"
+        ]
+    },
+    {
+        "type": "Grain",
+        "data": [
+            "Rice",
+            "Wheat",
+            "Oats",
+            "Barley",
+            "Quinoa",
+            "Corn"
+        ]
+    },
+    {
+        "type": "Herb & Spice",
+        "data": [
+            "Basil",
+            "Cilantro",
+            "Mint",
+            "Oregano",
+            "Paprika",
+            "Turmeric"
+        ]
+    }
+]

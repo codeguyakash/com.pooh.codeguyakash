@@ -1,78 +1,94 @@
 import {
   SafeAreaView,
   StyleSheet,
-  Text,
-  Modal,
+  ScrollView,
+  StatusBar,
+  FlatList,
   View,
-  Pressable,
+  Text,
+  SectionList,
 } from 'react-native';
 import React, { useEffect } from 'react';
 import { navigationRef } from '../../navigation/navigationRef';
 import { useSocket } from '../../context/SocketContext';
 import { useAppTheme } from '../../context/ThemeContext';
 import Header from '../../components/Header';
-import { fonts } from '../../utils/typography';
+
+import Card from '../../components/Card';
+import groupedData from '../../grouped-data.json';
+
+const sectionData: any = groupedData;
 
 const HomeScreen = () => {
-  const [isModalVisible, setIsModalVisible] = React.useState(false);
-
   const { sendMessage } = useSocket();
   const theme = useAppTheme();
   useEffect(() => {
+    console.log('StatusBar', StatusBar.currentHeight);
     sendMessage({
       message: `${navigationRef.getCurrentRoute()?.name} Rendered`,
     });
   }, []);
+  const data = new Array(50).fill(null);
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <Header title="Home Screen" />
-      <Text
-        style={{
-          color: theme.text,
-          textAlign: 'center',
-          fontFamily: fonts.bold,
-          fontSize: 20,
-          marginTop: 20,
-        }}>
-        Welcome to the Home Screen!
-      </Text>
-      <Pressable onPress={() => setIsModalVisible(true)}>
-        <Text style={{ color: theme.text, textAlign: 'center', marginTop: 20 }}>
-          Show Modal
-        </Text>
-      </Pressable>
-      <Modal
-        visible={isModalVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setIsModalVisible(false)}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Pressable onPress={() => setIsModalVisible(false)}>
-              <Text
-                style={{
-                  color: 'black',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  marginTop: 20,
-                }}>
-                Close
-              </Text>
-            </Pressable>
-            <View>
-              <Text
-                style={{
-                  color: theme.text,
-                  textAlign: 'center',
-                  marginTop: 20,
-                }}>
-                This is a Modal!
-              </Text>
-            </View>
-          </View>
-        </View>
-      </Modal>
+
+      <ScrollView>
+        {/* {data.map((_, index) => (
+          <Card key={index} />
+        ))} */}
+        <FlatList
+          data={data}
+          renderItem={({ item, index }) => <Card key={index} />}
+          horizontal={true}
+          keyExtractor={(_, index) => {
+            console.log(index, 'index');
+            return index.toString();
+          }}
+          ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+          ListEmptyComponent={
+            <Text
+              style={{
+                color: theme.text,
+              }}>
+              No Data Available
+            </Text>
+          }
+        />
+      </ScrollView>
+
+      <View style={{ height: 600 }}>
+        <SectionList
+          nestedScrollEnabled
+          sections={sectionData}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item }) => (
+            <Text
+              style={{
+                color: theme.text,
+                paddingHorizontal: 10,
+                fontSize: 16,
+              }}>
+              {item}
+            </Text>
+          )}
+          renderSectionHeader={({ section }) => (
+            <Text
+              style={{
+                fontWeight: 'bold',
+                color: '#000',
+                margin: 2,
+                borderRadius: 5,
+                fontSize: 20,
+                backgroundColor: '#fff',
+                padding: 10,
+              }}>
+              {section.type}
+            </Text>
+          )}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -82,23 +98,5 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    position: 'absolute',
-    bottom: 0,
-    height: '80%',
-    width: '100%',
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    padding: 20,
-    overflow: 'hidden',
   },
 });

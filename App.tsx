@@ -23,6 +23,8 @@ import { SocketProvider } from './src/context/SocketContext';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { ToastProvider } from './src/context/ToastContext';
 
+console.warn = () => null;
+
 const Stack = createStackNavigator();
 
 function AppNavigation(): React.JSX.Element {

@@ -5,12 +5,10 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
-  Image,
   SafeAreaView,
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import logo from '../../assets/icons/logo.png';
 import { RegisterRequest } from '../../types/apiTypes';
 import { register } from '../../api/modules/authApi';
 import { useAppTheme } from '../../context/ThemeContext';
@@ -19,6 +17,9 @@ import { useAuth } from '../../context/AuthContext';
 import { navigate, navigationRef } from '../../navigation/navigationRef';
 import { useNotification } from '../../notification/useNotification';
 import { useSocket } from '../../context/SocketContext';
+import { globalStyle } from '../../globalStyle';
+import Logo from '../../components/Logo';
+import Heading from '../../components/Heading';
 
 const RegisterScreen = () => {
   const [name, setName] = useState('');
@@ -100,14 +101,11 @@ const RegisterScreen = () => {
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <Image source={logo} style={styles.logo} />
-        <Text style={[styles.subtitle, { color: theme.subtitle }]}>
-          Create your account
-        </Text>
-
+        <Logo />
+        <Heading title=" Create your account" />
         <TextInput
           style={[
-            styles.input,
+            globalStyle.input,
             {
               backgroundColor: theme.inputBg,
               borderColor: theme.inputBorder,
@@ -123,7 +121,7 @@ const RegisterScreen = () => {
 
         <TextInput
           style={[
-            styles.input,
+            globalStyle.input,
             {
               backgroundColor: theme.inputBg,
               borderColor: theme.inputBorder,
@@ -141,7 +139,7 @@ const RegisterScreen = () => {
         <View style={styles.passwordWrapper}>
           <TextInput
             style={[
-              styles.input,
+              globalStyle.input,
               {
                 flex: 1,
                 marginBottom: 0,
@@ -167,7 +165,7 @@ const RegisterScreen = () => {
 
         <TouchableOpacity
           style={[
-            styles.loginButton,
+            globalStyle.button,
             { backgroundColor: loading ? theme.buttonDisabled : theme.button },
           ]}
           onPress={() =>
@@ -189,6 +187,13 @@ const RegisterScreen = () => {
             Login
           </Text>
         </Text>
+        <Text style={{ textAlign: 'center', marginTop: 20, color: theme.text }}>
+          <Text
+            style={{ color: theme.button, fontWeight: 'bold' }}
+            onPress={() => navigate('ForgotScreen')}>
+            Forget?
+          </Text>
+        </Text>
       </View>
     </SafeAreaView>
   );
@@ -205,19 +210,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 25,
   },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 30,
-  },
-  input: {
-    height: 50,
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    fontSize: 16,
-  },
   passwordWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -232,21 +224,9 @@ const styles = StyleSheet.create({
   toggleText: {
     fontSize: 18,
   },
-  loginButton: {
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
   loginText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
-  },
-  logo: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
-    marginBottom: 20,
-    borderRadius: 50,
   },
 });

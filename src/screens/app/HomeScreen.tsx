@@ -14,6 +14,8 @@ import { useSocket } from '../../context/SocketContext';
 import { useAppTheme } from '../../context/ThemeContext';
 import Header from '../../components/Header';
 
+import { globalStyle } from '../../globalStyle';
+
 import Card from '../../components/Card';
 import groupedData from '../../grouped-data.json';
 

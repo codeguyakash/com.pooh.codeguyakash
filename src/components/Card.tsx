@@ -2,18 +2,33 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 
 const Card = () => {
+  let randomId = Math.floor(Math.random() * 1000000000);
+
+  const randomNameGenerator = () => {
+    let alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    let randomName = '';
+    for (let i = 0; i < 10; i++) {
+      randomName += alphabet.charAt(
+        Math.floor(Math.random() * alphabet.length)
+      );
+    }
+    return randomName.charAt(0).toUpperCase() + randomName.slice(1);
+  };
+
+  let randomName = randomNameGenerator();
   return (
     <View style={styles.container}>
       <View style={styles.card}>
         <Image
           source={{
-            uri: `https://robohash.org/${Math.random()}8a16cd937f269372c26?gravatar=hashed`,
+            uri: `https://robohash.org/${randomId}8a16cd937f269372c26?gravatar=hashed`,
           }}
           style={styles.image}
         />
-        <Text style={{ textAlign: 'center', marginTop: 10 }}>
-          {`Image ID: ${Date.now()}`}
-        </Text>
+        <View>
+          <Text style={{ marginTop: 10 }}>{`Name: ${randomName}`}</Text>
+          <Text style={{ marginTop: 10 }}>{`ID: ${randomId}`}</Text>
+        </View>
       </View>
     </View>
   );
@@ -39,17 +54,16 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    marginVertical: 10,
-    height: 200,
-    width: '90%',
+    margin: 10,
+    width: 200,
     alignContent: 'center',
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 150,
+    height: 150,
+    borderRadius: 10,
     borderColor: '#cbcbcbff',
     borderWidth: 2,
   },

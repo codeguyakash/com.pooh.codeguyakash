@@ -34,19 +34,41 @@ const HomeScreen = () => {
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <Header title="Home Screen" />
 
-      <ScrollView>
-        {/* {data.map((_, index) => (
-          <Card key={index} />
-        ))} */}
+      <FlatList
+        data={data}
+        renderItem={({ item, index }) => <Card key={index} />}
+        horizontal={true}
+        keyExtractor={(_, index) => {
+          console.log(index, 'index');
+          return index.toString();
+        }}
+        ItemSeparatorComponent={() => <View style={{ width: 0 }} />}
+        ListEmptyComponent={
+          <Text
+            style={{
+              color: theme.text,
+            }}>
+            No Data Available
+          </Text>
+        }
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      />
+
+      <View style={{ height: 560 }}>
         <FlatList
           data={data}
-          renderItem={({ item, index }) => <Card key={index} />}
-          horizontal={true}
+          renderItem={({ item, index }) => (
+            <View style={{ flex: 1, flexWrap: 'wrap' }}>
+              <Card key={index} />
+            </View>
+          )}
           keyExtractor={(_, index) => {
             console.log(index, 'index');
             return index.toString();
           }}
-          ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+          numColumns={2}
+          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           ListEmptyComponent={
             <Text
               style={{
@@ -55,10 +77,23 @@ const HomeScreen = () => {
               No Data Available
             </Text>
           }
+          showsVerticalScrollIndicator={false}
         />
-      </ScrollView>
+      </View>
+    </SafeAreaView>
+  );
+};
 
-      <View style={{ height: 600 }}>
+export default HomeScreen;
+
+const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+  },
+});
+
+{
+  /* <View style={{ height: 600 }}>
         <SectionList
           nestedScrollEnabled
           sections={sectionData}
@@ -88,15 +123,5 @@ const HomeScreen = () => {
             </Text>
           )}
         />
-      </View>
-    </SafeAreaView>
-  );
-};
-
-export default HomeScreen;
-
-const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-  },
-});
+      </View> */
+}

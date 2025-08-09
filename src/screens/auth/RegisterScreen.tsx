@@ -175,7 +175,7 @@ const RegisterScreen = () => {
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.loginText}>Register</Text>
+            <Text style={styles.registerButtonText}>Register</Text>
           )}
         </TouchableOpacity>
 
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   toggleText: {
     fontSize: 18,
   },
-  loginText: {
+  registerButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',

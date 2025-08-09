@@ -189,7 +189,6 @@ const styles = StyleSheet.create({
   toggleText: {
     fontSize: 18,
   },
-
   loginText: {
     color: '#fff',
     fontSize: 16,

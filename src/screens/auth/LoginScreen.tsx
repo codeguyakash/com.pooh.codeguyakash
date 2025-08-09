@@ -5,12 +5,10 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
-  Image,
   SafeAreaView,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import logo from '../../assets/icons/logo.png';
 import { LoginRequest } from '../../types/apiTypes';
 import { login } from '../../api/modules/authApi';
 import { useAppTheme } from '../../context/ThemeContext';
@@ -18,6 +16,9 @@ import { useToast } from '../../context/ToastContext';
 import { navigate, navigationRef } from '../../navigation/navigationRef';
 import { useAuth } from '../../context/AuthContext';
 import { useSocket } from '../../context/SocketContext';
+import { globalStyle } from '../../globalStyle';
+import Logo from '../../components/Logo';
+import Heading from '../../components/Heading';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('pixel@codeguyakash.in');
@@ -82,13 +83,11 @@ const LoginScreen = () => {
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <Image source={logo} style={styles.logo} />
-        <Text style={[styles.subtitle, { color: theme.subtitle }]}>
-          Login to your account
-        </Text>
+        <Logo />
+        <Heading title="Login to your account" />
         <TextInput
           style={[
-            styles.input,
+            globalStyle.input,
             {
               backgroundColor: theme.inputBg,
               borderColor: theme.inputBorder,
@@ -106,7 +105,7 @@ const LoginScreen = () => {
         <View style={styles.passwordWrapper}>
           <TextInput
             style={[
-              styles.input,
+              globalStyle.input,
               {
                 flex: 1,
                 marginBottom: 0,
@@ -132,7 +131,7 @@ const LoginScreen = () => {
 
         <TouchableOpacity
           style={[
-            styles.loginButton,
+            globalStyle.button,
             { backgroundColor: loading ? theme.buttonDisabled : theme.button },
           ]}
           onPress={() => handleLogin(email, password, setLoading)}
@@ -153,6 +152,13 @@ const LoginScreen = () => {
             Register
           </Text>
         </Text>
+        <Text style={{ textAlign: 'center', marginTop: 20, color: theme.text }}>
+          <Text
+            style={{ color: theme.button, fontWeight: 'bold' }}
+            onPress={() => navigate('ForgotScreen')}>
+            Forgot Password?
+          </Text>
+        </Text>
       </View>
     </SafeAreaView>
   );
@@ -169,19 +175,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 30,
-  },
-  input: {
-    height: 48,
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    fontSize: 16,
-  },
   passwordWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -196,21 +189,10 @@ const styles = StyleSheet.create({
   toggleText: {
     fontSize: 18,
   },
-  loginButton: {
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
+
   loginText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
-  },
-  logo: {
-    width: 90,
-    height: 90,
-    alignSelf: 'center',
-    marginBottom: 20,
-    borderRadius: 45,
   },
 });

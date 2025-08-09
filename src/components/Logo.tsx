@@ -5,7 +5,7 @@ import logo from '../assets/icons/logo.png';
 const Logo = () => {
   return (
     <View>
-      <Image source={logo} style={styles.logo} />
+      <Image source={logo} style={styles.logo} resizeMode="contain" />
     </View>
   );
 };
@@ -14,10 +14,9 @@ export default Logo;
 
 const styles = StyleSheet.create({
   logo: {
-    width: 90,
-    height: 90,
+    width: '100%',
+    height: 180,
     alignSelf: 'center',
-    marginBottom: 20,
     borderRadius: 45,
   },
 });

@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import React from 'react';
 
 const Card = () => {
@@ -25,10 +25,6 @@ const Card = () => {
           }}
           style={styles.image}
         />
-        <View>
-          <Text style={{ marginTop: 10 }}>{`Name: ${randomName}`}</Text>
-          <Text style={{ marginTop: 10 }}>{`ID: ${randomId}`}</Text>
-        </View>
       </View>
     </View>
   );
@@ -56,6 +52,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     margin: 10,
     width: 200,
+    height: 200,
     alignContent: 'center',
     justifyContent: 'center',
     alignItems: 'center',
@@ -63,7 +60,7 @@ const styles = StyleSheet.create({
   image: {
     width: 150,
     height: 150,
-    borderRadius: 10,
+    borderRadius: 100,
     borderColor: '#cbcbcbff',
     borderWidth: 2,
   },

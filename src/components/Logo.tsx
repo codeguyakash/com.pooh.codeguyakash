@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image } from 'react-native';
 import React from 'react';
-import logo from '../assets/icons/logo.png';
+import logo from '../assets/icons/pooh.png';
 
 const Logo = () => {
   return (

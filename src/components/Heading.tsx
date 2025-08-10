@@ -19,7 +19,7 @@ export default Heading;
 
 const styles = StyleSheet.create({
   subtitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '600',
     textAlign: 'center',
     marginBottom: 30,

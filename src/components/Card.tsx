@@ -1,29 +1,18 @@
 import { Image, StyleSheet, View } from 'react-native';
 import React from 'react';
+import { useAppTheme } from '../context/ThemeContext';
 
 const Card = () => {
+  const theme = useAppTheme();
   let randomId = Math.floor(Math.random() * 1000000000);
-
-  const randomNameGenerator = () => {
-    let alphabet = 'abcdefghijklmnopqrstuvwxyz';
-    let randomName = '';
-    for (let i = 0; i < 10; i++) {
-      randomName += alphabet.charAt(
-        Math.floor(Math.random() * alphabet.length)
-      );
-    }
-    return randomName.charAt(0).toUpperCase() + randomName.slice(1);
-  };
-
-  let randomName = randomNameGenerator();
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
+      <View style={[styles.card, { backgroundColor: '#f5f5f5' }]}>
         <Image
           source={{
             uri: `https://robohash.org/${randomId}8a16cd937f269372c26?gravatar=hashed`,
           }}
-          style={styles.image}
+          style={[styles.image, { borderColor: theme.button }]}
         />
       </View>
     </View>
@@ -39,17 +28,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: 20,
     padding: 20,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
     margin: 10,
     width: 200,
     height: 200,
@@ -58,10 +38,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 150,
-    height: 150,
+    width: 180,
+    height: 180,
     borderRadius: 100,
-    borderColor: '#cbcbcbff',
     borderWidth: 2,
   },
 });

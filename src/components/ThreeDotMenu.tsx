@@ -16,12 +16,7 @@ interface MenuItem {
   onPress: () => void;
 }
 
-interface Props {
-  iconColor?: string;
-  menuStyle?: ViewStyle;
-}
-
-const ThreeDotMenu: React.FC<Props> = ({ iconColor = '#000', menuStyle }) => {
+const ThreeDotMenu = () => {
   const [visible, setVisible] = useState(false);
   const theme = useAppTheme();
 
@@ -70,11 +65,11 @@ const ThreeDotMenu: React.FC<Props> = ({ iconColor = '#000', menuStyle }) => {
   return (
     <View style={styles.wrapper}>
       <TouchableOpacity onPress={toggleMenu} style={styles.dotsButton}>
-        <Text style={[styles.dotsIcon, { color: iconColor }]}>⋮</Text>
+        <Text style={[styles.dotsIcon, { color: theme.text }]}>⋮</Text>
       </TouchableOpacity>
 
       {visible && (
-        <View style={[styles.menuBox, menuStyle]}>
+        <View style={[styles.menuBox, { backgroundColor: theme.background }]}>
           {menuItems.map((item, index) => (
             <TouchableOpacity
               key={index}
@@ -110,12 +105,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 50,
     right: -10,
-    backgroundColor: '#20232cff',
     borderRadius: 3,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
+    elevation: 5,
     zIndex: 99,
     paddingVertical: 6,
     minWidth: 150,

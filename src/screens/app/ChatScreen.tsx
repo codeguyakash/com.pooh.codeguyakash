@@ -4,7 +4,7 @@ import {
   Text,
   View,
   TextInput,
-  Button,
+  Image,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
@@ -14,6 +14,7 @@ import { useSocket } from '../../context/SocketContext';
 import { useAppTheme } from '../../context/ThemeContext';
 import Header from '../../components/Header';
 import { globalStyle } from '../../globalStyle';
+import chatImage from '../../assets/icons/image.png';
 
 const ChatScreen = () => {
   const { sendMessage, lastMessage } = useSocket();
@@ -44,10 +45,17 @@ const ChatScreen = () => {
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <View style={[styles.container, { backgroundColor: theme.background }]}>
         <Header title="Chat Screen" />
+        <View>
+          <Image
+            source={chatImage}
+            style={{ width: '100%', height: 200, marginVertical: 100 }}
+            resizeMode="contain"
+          />
+        </View>
         <View style={{ paddingHorizontal: 20 }}>
           <TextInput
             style={[
-              styles.input,
+              globalStyle.input,
               {
                 backgroundColor: theme.inputBg,
                 borderColor: theme.inputBorder,
@@ -73,7 +81,7 @@ const ChatScreen = () => {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={{ color: theme.text }}>Login</Text>
+              <Text style={styles.chatText}>Send</Text>
             )}
           </TouchableOpacity>
           {lastMessage && (
@@ -100,12 +108,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
-  input: {
-    height: 48,
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 15,
+  chatText: {
+    color: '#fff',
     fontSize: 16,
+    fontWeight: '600',
   },
 });

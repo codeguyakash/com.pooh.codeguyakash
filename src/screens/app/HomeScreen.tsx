@@ -9,14 +9,12 @@ import {
   Modal,
   Image,
 } from 'react-native';
-import React, { useEffect } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useEffect, useState, useCallback } from 'react';
 import { navigationRef } from '../../navigation/navigationRef';
 import { useSocket } from '../../context/SocketContext';
 import { useAppTheme } from '../../context/ThemeContext';
 import Header from '../../components/Header';
-
-import { globalStyle } from '../../globalStyle';
-
 import Card from '../../components/Card';
 import groupedData from '../../grouped-data.json';
 import { useToast } from '../../context/ToastContext';
@@ -24,23 +22,33 @@ import { useToast } from '../../context/ToastContext';
 const sectionData: any = groupedData;
 
 const HomeScreen = () => {
+  const insets = useSafeAreaInsets();
   const { sendMessage } = useSocket();
   const { showToast } = useToast();
   const theme = useAppTheme();
 
-  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     console.log('StatusBar', StatusBar.currentHeight);
     sendMessage({
       message: `${navigationRef.getCurrentRoute()?.name} Rendered`,
     });
+    console.log(insets);
   }, []);
-  const data = new Array(50).fill(null);
+  const data = new Array(20).fill(null);
 
   const handleCard = (index: any) => {
     setIsModalVisible(true);
   };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   const renderCard = ({ index }: { index: number }) => (
     <Pressable onPress={() => handleCard(index)}>
@@ -55,7 +63,6 @@ const HomeScreen = () => {
         renderItem={renderCard}
         horizontal={true}
         keyExtractor={(_, index) => {
-          console.log(index, 'index');
           return index.toString();
         }}
         ItemSeparatorComponent={() => <View style={{ width: 0 }} />}
@@ -69,14 +76,15 @@ const HomeScreen = () => {
         }
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
       />
 
-      <View style={{ height: 600 }}>
+      <View style={{ height: 650 }}>
         <FlatList
           data={data}
           renderItem={renderCard}
           keyExtractor={(_, index) => {
-            console.log(index, 'index');
             return index.toString();
           }}
           numColumns={2}
@@ -90,6 +98,8 @@ const HomeScreen = () => {
             </Text>
           }
           showsVerticalScrollIndicator={false}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
         />
       </View>
       <Modal
@@ -104,9 +114,10 @@ const HomeScreen = () => {
               style={{
                 position: 'absolute',
                 right: 10,
-                top: 8,
+                top: 0,
+                fontSize: 28,
               }}>
-              ❌
+              ×
             </Text>
             <Image
               source={{
@@ -129,7 +140,7 @@ const styles = StyleSheet.create({
   },
   modalBackground: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(91, 91, 91, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
   },

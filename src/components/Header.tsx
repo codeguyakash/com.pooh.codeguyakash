@@ -9,7 +9,7 @@ const Header = ({ title = 'Screen' }: { title?: string }) => {
   return (
     <SafeAreaView style={[styles.container]}>
       <Text style={[styles.heading, { color: theme.text }]}>{title}</Text>
-      <ThreeDotMenu iconColor={theme.text} />
+      <ThreeDotMenu />
     </SafeAreaView>
   );
 };
@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingTop: Platform.OS === 'android' ? 50 : 0,
   },
   heading: {
     fontSize: 24,

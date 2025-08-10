@@ -6,6 +6,8 @@ import { navigationRef } from './src/navigation/navigationRef';
 
 import messaging from '@react-native-firebase/messaging';
 
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 import RegisterScreen from './src/screens/auth/RegisterScreen';
 import LoginScreen from './src/screens/auth/LoginScreen';
 import ForgotScreen from './src/screens/auth/ForgotScreen';
@@ -81,11 +83,13 @@ function App(): React.JSX.Element {
     <SocketProvider>
       <ToastProvider>
         <ThemeProvider>
-          <NavigationContainer ref={navigationRef}>
-            <AuthProvider>
-              <AppNavigation />
-            </AuthProvider>
-          </NavigationContainer>
+          <SafeAreaProvider>
+            <NavigationContainer ref={navigationRef}>
+              <AuthProvider>
+                <AppNavigation />
+              </AuthProvider>
+            </NavigationContainer>
+          </SafeAreaProvider>
         </ThemeProvider>
       </ToastProvider>
     </SocketProvider>

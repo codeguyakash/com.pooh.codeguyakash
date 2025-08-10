@@ -70,6 +70,11 @@ const RegisterScreen = () => {
         await authRegister(accessToken, refreshToken);
         await AsyncStorage.setItem('userId', Number(user.id).toString());
         const message = response.message || 'Registration successful';
+        setEmail('');
+        setPassword('');
+        setName('');
+        setFcmToken('');
+
         showToast(message);
       } else {
         console.error('Registration failed:', response);

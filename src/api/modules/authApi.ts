@@ -27,6 +27,9 @@ export const register = (payload: RegisterRequest): Promise<RegisterResponse> =>
 export const getUserData = (userId: string): Promise<LoginResponse> =>
   getMethod<LoginResponse>(`/auth/user/${userId}`);
 
+export const resetPassword = (payload: any): Promise<any> =>
+  postMethod<any>('/auth/reset-password-link', payload);
+
 export const tokenRefresh = (payload: any): Promise<any> =>
   postMethod<any>('/auth/token-refresh', payload);
 

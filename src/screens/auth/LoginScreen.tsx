@@ -55,6 +55,9 @@ const LoginScreen = () => {
         await AsyncStorage.setItem('userId', Number(user.id).toString());
 
         const message = response.message || 'Login successful';
+        setEmail('');
+        setPassword('');
+
         showToast(message);
       } else {
         const errorMsg = response.message || 'Login failed';

@@ -13,6 +13,7 @@ import { useToast } from '../../context/ToastContext';
 import { navigate, navigationRef } from '../../navigation/navigationRef';
 import { useSocket } from '../../context/SocketContext';
 import { globalStyle } from '../../globalStyle';
+import { resetPassword } from '../../api/modules/authApi';
 import Logo from '../../components/Logo';
 import Heading from '../../components/Heading';
 
@@ -34,11 +35,39 @@ const LoginScreen = () => {
     email: string,
     setLoading: (v: boolean) => void
   ) => {
-    setLoading(true);
-    const payload: any = { email };
-
+    if (!email) {
+      showToast('Please enter your email');
+      return;
+    }
     try {
+      const payload: any = { email };
+      const response = await resetPassword(payload);
+      if (response.success) {
+        const message = response.message || 'Reset successful';
+        showToast(message);
+        setEmail('');
+        setTimeout(() => {
+          navigate('LoginScreen');
+        }, 2000);
+      } else {
+        const errorMsg = response.message || 'Reset failed';
+        showToast(errorMsg);
+      }
     } catch (error: any) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        const errorMsg = error.response.data.message;
+        console.log('Error message from server:', errorMsg);
+        showToast(errorMsg, 3000);
+      } else if (error instanceof Error) {
+        console.log('Generic error message:', error.message);
+        showToast(error.message || 'An error occurred during registration');
+      } else {
+        showToast('An unknown error occurred during registration');
+      }
     } finally {
       setLoading(false);
     }

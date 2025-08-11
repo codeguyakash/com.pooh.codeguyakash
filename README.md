@@ -27,3 +27,5 @@ git push origin main
 git add .
 git commit -m "PROD BUILD"
 git push
+
+git remote set-url origin git@github.com:codeguyakash/pooh.node.git

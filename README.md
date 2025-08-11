@@ -17,7 +17,7 @@ adb install app/build/outputs/apk/release/app-release.apk
 
 adb -s RZCW515XN3H install path/to/your-app.apk
 
-https://raw.githubusercontent.com/codeguyakash/pooh.codeguyakash/main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+https://raw.githubusercontent.com/codeguyakash/com.pooh.codeguyakash/main/src/assets/icons/pooh.png
 
 git commit --allow-empty -m "trigger workflow again"
 git push origin main

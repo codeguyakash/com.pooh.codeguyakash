@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,21 +7,33 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUserData } from '../../api/modules/authApi';
 import { useSocket } from '../../context/SocketContext';
 import { navigationRef } from '../../navigation/navigationRef';
 import { useAppTheme } from '../../context/ThemeContext';
-import Header from '../../components/Header';
+
 import logo from '../../assets/icons/logo.png';
 import verified from '../../assets/icons/verified.png';
+
+import { useRoute, RouteProp } from '@react-navigation/native';
+import { globalStyle } from '../../globalStyle';
+
+type ProfileScreenRouteParams = {
+  name?: string;
+};
 
 const ProfileScreen = ({ navigation }: any) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  // const [isUpdating, setIsUpdating] = useState(false);
   const { socket, sendMessage } = useSocket();
   const theme = useAppTheme();
+
+  const route =
+    useRoute<RouteProp<{ params: ProfileScreenRouteParams }, 'params'>>();
 
   useEffect(() => {
     sendMessage({
@@ -29,6 +41,12 @@ const ProfileScreen = ({ navigation }: any) => {
     });
     userData();
   }, [navigation]);
+
+  useEffect(() => {
+    if (route.params?.name) {
+      navigation.setOptions({ title: route.params.name });
+    }
+  }, [route.params?.name]);
 
   async function userData() {
     setLoading(true);
@@ -45,21 +63,34 @@ const ProfileScreen = ({ navigation }: any) => {
       setLoading(false);
     }
   }
-  console.log(user);
+
+  const formatDateAndTime = (dateString: string) => {
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    } as const;
+    const date = new Date(dateString);
+    return date.toLocaleString('en-US', options);
+  };
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <Header title="Profile" />
         {user ? (
           <>
             <View style={styles.profileSection}>
               <Image
                 source={{ uri: user.avatar_url || logo }}
-                style={styles.avatar}
+                style={[styles.avatar, { borderColor: theme.button }]}
               />
               <TouchableOpacity>
-                <Text style={styles.editText}>Edit</Text>
+                <Text style={[styles.editText, { color: theme.text }]}>
+                  Edit
+                </Text>
               </TouchableOpacity>
 
               <View style={styles.infoBlock}>
@@ -111,7 +142,7 @@ const ProfileScreen = ({ navigation }: any) => {
                   Created At
                 </Text>
                 <Text style={[{ color: theme.text }]}>
-                  {user.created_at || 'N/A'}
+                  {formatDateAndTime(user.created_at) || 'N/A'}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
@@ -119,9 +150,33 @@ const ProfileScreen = ({ navigation }: any) => {
                   Updated At
                 </Text>
                 <Text style={[{ color: theme.text }]}>
-                  {user.updated_at || 'N/A'}
+                  {formatDateAndTime(user.updated_at) || 'N/A'}
                 </Text>
               </View>
+            </View>
+            <View style={{ paddingHorizontal: 20 }}>
+              <TouchableOpacity
+                style={[
+                  globalStyle.button,
+                  {
+                    backgroundColor: loading
+                      ? theme.buttonDisabled
+                      : theme.button,
+                  },
+                ]}
+                onPress={() =>
+                  Alert.alert(
+                    'Feature under development',
+                    'This feature is under development.'
+                  )
+                }
+                activeOpacity={0.8}>
+                {loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={[styles.updateInfo]}>UPDATE</Text>
+                )}
+              </TouchableOpacity>
             </View>
           </>
         ) : (
@@ -156,19 +211,23 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 60,
     marginBottom: 10,
-    borderColor: '#00FF7F',
-    borderWidth: 1,
+    borderWidth: 2,
   },
   editText: {
-    color: '#00FF7F',
     marginBottom: 30,
     fontWeight: '500',
+  },
+  updateInfo: {
+    fontWeight: '500',
+    color: '#fff',
   },
   infoBlock: {
     width: '100%',
     marginBottom: 15,
     paddingBottom: 5,
     fontWeight: '500',
+    borderBottomColor: '#d0d0d0ff',
+    borderBottomWidth: 0.2,
   },
   label: {
     fontSize: 16,

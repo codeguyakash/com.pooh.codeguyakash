@@ -1,13 +1,9 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
 import { navigationRef } from './src/navigation/navigationRef';
-
 import messaging from '@react-native-firebase/messaging';
-
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
 import RegisterScreen from './src/screens/auth/RegisterScreen';
 import LoginScreen from './src/screens/auth/LoginScreen';
 import ForgotScreen from './src/screens/auth/ForgotScreen';
@@ -22,8 +18,9 @@ import SettingsScreen from './src/screens/app/SettingsScreen';
 import { useNotification } from './src/notification/useNotification';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { SocketProvider } from './src/context/SocketContext';
-import { ThemeProvider } from './src/context/ThemeContext';
+import { ThemeProvider, useAppTheme } from './src/context/ThemeContext';
 import { ToastProvider } from './src/context/ToastContext';
+import ThreeDotMenu from './src/components/ThreeDotMenu';
 
 console.warn = () => null;
 
@@ -31,6 +28,7 @@ const Stack = createStackNavigator();
 
 function AppNavigation(): React.JSX.Element {
   const { isAuthenticated, loading } = useAuth();
+  const theme = useAppTheme();
   useNotification();
 
   useEffect(() => {
@@ -58,20 +56,81 @@ function AppNavigation(): React.JSX.Element {
   if (loading) return <SplashScreen />;
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: theme.background,
+          elevation: 0,
+        },
+        headerRightContainerStyle: { paddingRight: 12 },
+        headerTintColor: theme.text,
+        headerTitleStyle: {
+          fontWeight: '500',
+        },
+        headerRight: () => <ThreeDotMenu />,
+      }}>
       {isAuthenticated ? (
         <>
-          <Stack.Screen name="HomeScreen" component={HomeScreen} />
-          <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-          <Stack.Screen name="ChatScreen" component={ChatScreen} />
-          <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
-          <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+          <Stack.Screen
+            name="HomeScreen"
+            component={HomeScreen}
+            options={{
+              title: 'Home',
+            }}
+          />
+          <Stack.Screen
+            name="ProfileScreen"
+            component={ProfileScreen}
+            options={({ route }: any) => ({
+              title: route.params?.name || 'Profile',
+            })}
+          />
+          <Stack.Screen
+            name="ChatScreen"
+            component={ChatScreen}
+            options={{
+              title: 'Chat',
+            }}
+          />
+          <Stack.Screen
+            name="DashboardScreen"
+            component={DashboardScreen}
+            options={{
+              title: 'Dashboard',
+            }}
+          />
+          <Stack.Screen
+            name="SettingsScreen"
+            component={SettingsScreen}
+            options={{
+              title: 'Settings',
+            }}
+          />
         </>
       ) : (
         <>
-          <Stack.Screen name="LoginScreen" component={LoginScreen} />
-          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-          <Stack.Screen name="ForgotScreen" component={ForgotScreen} />
+          <Stack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="RegisterScreen"
+            component={RegisterScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ForgotScreen"
+            component={ForgotScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
         </>
       )}
     </Stack.Navigator>

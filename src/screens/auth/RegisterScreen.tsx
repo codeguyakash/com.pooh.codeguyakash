@@ -69,6 +69,7 @@ const RegisterScreen = () => {
 
         await authRegister(accessToken, refreshToken);
         await AsyncStorage.setItem('userId', Number(user.id).toString());
+        await AsyncStorage.setItem('userInfo', JSON.stringify(user));
         const message = response.message || 'Registration successful';
         setEmail('');
         setPassword('');

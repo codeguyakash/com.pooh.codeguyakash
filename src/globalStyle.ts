@@ -18,4 +18,9 @@ export const globalStyle = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });

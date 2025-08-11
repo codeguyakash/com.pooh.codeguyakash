@@ -3,7 +3,8 @@ import { createNavigationContainerRef } from '@react-navigation/native';
 export type RootStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
-  ProfileScreen: undefined;
+  // ProfileScreen: undefined;
+  ProfileScreen: { name: string };
   HomeScreen: undefined;
   ChatScreen: undefined;
   SettingsScreen: undefined;

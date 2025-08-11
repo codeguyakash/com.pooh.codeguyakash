@@ -1,12 +1,10 @@
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect } from 'react';
 import { navigationRef } from '../../navigation/navigationRef';
 import { useSocket } from '../../context/SocketContext';
 import { useAppTheme } from '../../context/ThemeContext';
-import { Text } from 'react-native-gesture-handler';
-import { globalStyle } from '../../globalStyle';
 
-const SettingsScreen = () => {
+const AppInfoScreen = () => {
   const { sendMessage } = useSocket();
   const theme = useAppTheme();
   useEffect(() => {
@@ -18,21 +16,26 @@ const SettingsScreen = () => {
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <Text style={[globalStyle.heading, { color: theme.text }]}>
-          Settings
+        <Text style={[{ color: theme.text }]}>
+          Welcome to the AppInfoScreen!
         </Text>
       </View>
     </SafeAreaView>
   );
 };
 
-export default SettingsScreen;
+export default AppInfoScreen;
 
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
   },
   container: {
-    // marginTop: 10,
+    // marginTop: 10
+    // paddingHorizontal: 20,
+  },
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
   },
 });

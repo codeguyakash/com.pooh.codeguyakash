@@ -12,7 +12,6 @@ import React, { useEffect, useState } from 'react';
 import { navigationRef } from '../../navigation/navigationRef';
 import { useSocket } from '../../context/SocketContext';
 import { useAppTheme } from '../../context/ThemeContext';
-import Header from '../../components/Header';
 import { globalStyle } from '../../globalStyle';
 import chatImage from '../../assets/icons/image.png';
 
@@ -44,7 +43,6 @@ const ChatScreen = () => {
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <Header title="Chat Screen" />
         <View>
           <Image
             source={chatImage}

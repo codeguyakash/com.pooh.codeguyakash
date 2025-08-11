@@ -53,6 +53,7 @@ const LoginScreen = () => {
 
         authLogin(accessToken, refreshToken);
         await AsyncStorage.setItem('userId', Number(user.id).toString());
+        await AsyncStorage.setItem('userInfo', JSON.stringify(user));
 
         const message = response.message || 'Login successful';
         setEmail('');

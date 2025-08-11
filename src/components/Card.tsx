@@ -1,18 +1,19 @@
 import { Image, StyleSheet, View } from 'react-native';
 import React from 'react';
-import { useAppTheme } from '../context/ThemeContext';
+import { randomColor } from '../utils/randomColor';
 
-const Card = () => {
-  const theme = useAppTheme();
-  let randomId = Math.floor(Math.random() * 1000000000);
+const Card = ({ image }: { image: string }) => {
   return (
     <View style={styles.container}>
-      <View style={[styles.card, { backgroundColor: '#f5f5f5' }]}>
+      <View style={[styles.card]}>
         <Image
           source={{
-            uri: `https://robohash.org/${randomId}8a16cd937f269372c26?gravatar=hashed`,
+            uri: image,
           }}
-          style={[styles.image, { borderColor: theme.button }]}
+          style={[
+            styles.image,
+            { backgroundColor: randomColor() || '#c7c7c7ff' },
+          ]}
         />
       </View>
     </View>
@@ -28,19 +29,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: {
-    borderRadius: 20,
-    padding: 20,
-    margin: 10,
     width: 200,
     height: 200,
     alignContent: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
+    borderWidth: 0.2,
+    borderColor: '#858585ff',
+    borderRadius: 10,
   },
   image: {
-    width: 180,
-    height: 180,
-    borderRadius: 100,
-    borderWidth: 2,
+    width: 200,
+    height: 200,
+    borderRadius: 10,
   },
 });

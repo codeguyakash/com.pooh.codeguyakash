@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,14 +11,37 @@ import { useAuth } from '../context/AuthContext';
 import { logout } from '../api/modules/authApi';
 import { useToast } from '../context/ToastContext';
 import { useAppTheme } from '../context/ThemeContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 interface MenuItem {
   label: string;
   onPress: () => void;
 }
 
+interface UserInfo {
+  id: number;
+  uuid: string;
+  name: string;
+  email: string;
+  role: string;
+  avatar_url: string;
+  is_verified: boolean;
+  fcm_token: string;
+}
+
 const ThreeDotMenu = () => {
   const [visible, setVisible] = useState(false);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const theme = useAppTheme();
+
+  useEffect(() => {
+    (async () => {
+      const userInfo = await AsyncStorage.getItem('userInfo');
+      if (userInfo) {
+        console.log('User Info:', JSON.parse(userInfo));
+        setUserInfo(JSON.parse(userInfo));
+      }
+    })();
+  }, []);
 
   const { logout: authLogout } = useAuth();
   const { showToast } = useToast();
@@ -27,21 +50,24 @@ const ThreeDotMenu = () => {
   const hideMenu = () => setVisible(false);
   const menuItems: MenuItem[] = [
     {
+      label: 'Home',
+      onPress: () => navigationRef.navigate('HomeScreen'),
+    },
+    {
       label: 'Chat',
       onPress: () => navigationRef.navigate('ChatScreen'),
     },
 
-    {
-      label: 'Home',
-      onPress: () => navigationRef.navigate('HomeScreen'),
-    },
     {
       label: 'Dashboard',
       onPress: () => navigationRef.navigate('DashboardScreen'),
     },
     {
       label: 'Profile',
-      onPress: () => navigationRef.navigate('ProfileScreen'),
+      onPress: () =>
+        navigationRef.navigate('ProfileScreen', {
+          name: userInfo?.name || 'User',
+        }),
     },
     {
       label: 'Settings',

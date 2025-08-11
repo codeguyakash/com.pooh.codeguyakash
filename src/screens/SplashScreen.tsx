@@ -1,7 +1,15 @@
-import { View, Animated, StyleSheet, Easing, Text } from 'react-native';
+import {
+  View,
+  Animated,
+  StyleSheet,
+  Easing,
+  Text,
+  Linking,
+  Pressable,
+} from 'react-native';
 import { useEffect, useRef } from 'react';
 import { useAppTheme } from '../context/ThemeContext';
-import logo from '../assets/icons/logo.png';
+import logo from '../assets/icons/pooh.png';
 
 import { displayName as appName } from '../../app.json';
 
@@ -38,11 +46,20 @@ const SplashScreen = () => {
             transform: [{ translateY: bounceValue }],
           },
         ]}
+        resizeMode="contain"
       />
 
       <Text style={[{ color: theme.text }, styles.heading]}>
         {appName || 'Pooh'}
       </Text>
+
+      <Pressable
+        style={{ position: 'absolute', bottom: 40 }}
+        onPress={() => Linking.openURL('https://github.com/codeguyakash')}>
+        <Text style={[{ color: theme.text, fontWeight: 'bold' }]}>
+          Made with ♥ by codeguyakash
+        </Text>
+      </Pressable>
     </View>
   );
 };
@@ -56,8 +73,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: '100%',
+    height: 120,
     marginBottom: 10,
     borderRadius: 100,
   },

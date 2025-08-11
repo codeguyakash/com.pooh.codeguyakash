@@ -37,7 +37,6 @@ const ThreeDotMenu = () => {
     (async () => {
       const userInfo = await AsyncStorage.getItem('userInfo');
       if (userInfo) {
-        console.log('User Info:', JSON.parse(userInfo));
         setUserInfo(JSON.parse(userInfo));
       }
     })();
@@ -72,6 +71,10 @@ const ThreeDotMenu = () => {
     {
       label: 'Settings',
       onPress: () => navigationRef.navigate('SettingsScreen'),
+    },
+    {
+      label: 'App Info',
+      onPress: () => navigationRef.navigate('AppInfoScreen'),
     },
     {
       label: 'Logout',

@@ -16,6 +16,7 @@ import { navigationRef } from '../../navigation/navigationRef';
 import { useSocket } from '../../context/SocketContext';
 import { useAppTheme } from '../../context/ThemeContext';
 import Card from '../../components/Card';
+import { globalStyle } from '../../globalStyle';
 
 const HomeScreen = () => {
   const insets = useSafeAreaInsets();
@@ -37,7 +38,7 @@ const HomeScreen = () => {
   const [seed, setSeed] = useState(() =>
     Math.floor(Math.random() * 1e9).toString()
   );
-  const data = useMemo(() => Array.from({ length: 8 }, (_, i) => i), []);
+  const data = useMemo(() => Array.from({ length: 20 }, (_, i) => i), []);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -65,6 +66,10 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
+      {/* <Text
+        style={[globalStyle.heading, { color: theme.text, marginBottom: 10 }]}>
+        Home Screen!
+      </Text> */}
       <FlatList
         data={data}
         renderItem={renderItem}

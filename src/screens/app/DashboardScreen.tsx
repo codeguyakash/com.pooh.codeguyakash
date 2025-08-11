@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { navigationRef } from '../../navigation/navigationRef';
 import { useSocket } from '../../context/SocketContext';
 import { useAppTheme } from '../../context/ThemeContext';
+import { globalStyle } from '../../globalStyle';
 
 const DashboardScreen = () => {
   const { sendMessage } = useSocket();
@@ -16,7 +17,9 @@ const DashboardScreen = () => {
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <Text style={[{ color: theme.text }]}>Welcome to the Dashboard!</Text>
+        <Text style={[globalStyle.heading, { color: theme.text }]}>
+          Dashboard Screen!
+        </Text>
       </View>
     </SafeAreaView>
   );

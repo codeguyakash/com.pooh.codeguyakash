@@ -43,6 +43,9 @@ const ChatScreen = () => {
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <View style={[styles.container, { backgroundColor: theme.background }]}>
+        <Text style={[globalStyle.heading, { color: theme.text }]}>
+          Chat Screen!
+        </Text>
         <View>
           <Image
             source={chatImage}

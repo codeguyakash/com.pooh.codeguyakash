@@ -14,6 +14,7 @@ import HomeScreen from './src/screens/app/HomeScreen';
 import SplashScreen from './src/screens/SplashScreen';
 import DashboardScreen from './src/screens/app/DashboardScreen';
 import SettingsScreen from './src/screens/app/SettingsScreen';
+import AppInfoScreen from './src/screens/app/AppInfoScreen';
 
 import { useNotification } from './src/notification/useNotification';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
@@ -105,6 +106,13 @@ function AppNavigation(): React.JSX.Element {
             component={SettingsScreen}
             options={{
               title: 'Settings',
+            }}
+          />
+          <Stack.Screen
+            name="AppInfoScreen"
+            component={AppInfoScreen}
+            options={{
+              title: 'App Info',
             }}
           />
         </>

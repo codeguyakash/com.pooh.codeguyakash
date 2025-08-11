@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { navigationRef } from '../../navigation/navigationRef';
 import { useSocket } from '../../context/SocketContext';
 import { useAppTheme } from '../../context/ThemeContext';
+import { globalStyle } from '../../globalStyle';
 
 const AppInfoScreen = () => {
   const { sendMessage } = useSocket();
@@ -16,8 +17,8 @@ const AppInfoScreen = () => {
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <Text style={[{ color: theme.text }]}>
-          Welcome to the AppInfoScreen!
+        <Text style={[globalStyle.heading, { color: theme.text }]}>
+          App Info Screen!
         </Text>
       </View>
     </SafeAreaView>

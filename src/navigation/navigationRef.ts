@@ -10,6 +10,7 @@ export type RootStackParamList = {
   SettingsScreen: undefined;
   DashboardScreen: undefined;
   ForgotScreen: undefined;
+  AppInfoScreen: undefined;
 };
 
 // Properly typed navigation reference

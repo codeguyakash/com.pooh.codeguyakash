@@ -15,7 +15,7 @@ import { useSocket } from '../../context/SocketContext';
 import { navigationRef } from '../../navigation/navigationRef';
 import { useAppTheme } from '../../context/ThemeContext';
 
-import logo from '../../assets/icons/logo.png';
+import logo from '../../assets/icons/pooh.png';
 import verified from '../../assets/icons/verified.png';
 
 import { useRoute, RouteProp } from '@react-navigation/native';

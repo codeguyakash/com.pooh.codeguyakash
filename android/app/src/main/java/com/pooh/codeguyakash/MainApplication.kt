@@ -1,4 +1,4 @@
-package com.pooh.codeguyakash;
+package com.pooh.codeguyakash
 
 import android.app.Application
 import com.facebook.react.PackageList

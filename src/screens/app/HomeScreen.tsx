@@ -18,6 +18,9 @@ import { useAppTheme } from '../../context/ThemeContext';
 import Card from '../../components/Card';
 import { globalStyle } from '../../globalStyle';
 
+import { NativeModules } from 'react-native';
+
+
 const HomeScreen = () => {
   const insets = useSafeAreaInsets();
   const { sendMessage } = useSocket();
@@ -32,7 +35,11 @@ const HomeScreen = () => {
     sendMessage({
       message: `${navigationRef.getCurrentRoute()?.name} Rendered`,
     });
+    let tId = setTimeout(() => {
+      NativeModules.NotificationModule.fire("Pooh", "Welcome to Pooh!");
+    }, 2000);
     console.log(insets);
+    return () => clearTimeout(tId);
   }, []);
 
   const [seed, setSeed] = useState(() =>

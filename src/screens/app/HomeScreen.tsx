@@ -35,11 +35,8 @@ const HomeScreen = () => {
     sendMessage({
       message: `${navigationRef.getCurrentRoute()?.name} Rendered`,
     });
-    let tId = setTimeout(() => {
-      NativeModules.NotificationModule.fire("Pooh", "Welcome to Pooh!");
-    }, 2000);
-    console.log(insets);
-    return () => clearTimeout(tId);
+
+    return () => console.log("Cleanup");
   }, []);
 
   const [seed, setSeed] = useState(() =>
@@ -53,9 +50,14 @@ const HomeScreen = () => {
     setTimeout(() => setRefreshing(false), 600);
   }, []);
 
+  const showNotification = () => {
+    NativeModules.NotificationModule.fire("Pooh", "Welcome to Pooh!");
+  };
+
   const handleCard = useCallback((uri: string) => {
     setSelectedUri(uri);
     setIsModalVisible(true);
+    showNotification();
   }, []);
   const hideModal = () => setIsModalVisible(false);
 
